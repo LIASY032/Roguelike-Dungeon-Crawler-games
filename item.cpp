@@ -2,6 +2,10 @@
 
 #include <iostream>
 
+Item::Item(std::string name){
+    _name = name;
+}
+
 Weapon::Weapon(std::string name) : _name{name}{
 
 }
