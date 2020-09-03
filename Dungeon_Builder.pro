@@ -17,9 +17,9 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
         core.cpp \
         creature.cpp \
+        dungeon.cpp \
         item.cpp \
-        main.cpp \
-        room.cpp
+        main.cpp
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -29,5 +29,5 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 HEADERS += \
     core.h \
     creature.h \
-    item.h \
-    room.h
+    dungeon.h \
+    item.h

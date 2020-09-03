@@ -4,48 +4,37 @@
 #include <iostream>
 #include <sstream>
 
+class Base{
+public:
+    Base()= default;
+    Base(int id){
+        _id = id;
+    }
+    virtual void o() = 0;
+    void print(){
+        std::cout << "abfvausvf" << std::endl;
+    }
+protected:
+    int _id;
+};
 
+class Sub : public Base{
+public:
+
+    void o() override{
+        std::cout << "shi" << std::endl;
+    }
+};
 
 
 
 
 using namespace std;
-int main(int argc, char *argv[])
+int main()
 {
-//    cout << setw(35) << setfill('-') << "" << endl << setfill(' ')
-//         << '|' << setw(16) << right << "right aligned"
-//         << '|' << setw(16) << left << "left aligned"
-//         << '|' << endl
-//         << '|' << setw(16) << "still left"
-//         << '|' << "width resets"
-//         << '|' << endl
-//         << '|' << setw(16) << true
-//         << '|' << setw(16) << false
-//         << '|' << endl
-//         << boolalpha // format booleans as 'true' and 'false'
-//         << '|' << setw(16) << true
-//         << '|' << setw(16) << false
-//         << '|' << endl << right
-//         << '|' << setw(16) << 1000.0
-//         << '|' << setw(16) << scientific << 1000.0
-//         << '|' << endl
-//         << setw(35) << setfill('-') << "" << endl;
+    Sub sub;
+    sub.print();
 
-
-
-
-//    std::stringstream ss{};
-//    int number{0};
-//    ss << number;
-//    for(int i{0};i<10;++i){
-//        ss >> number;
-//        ss.clear();
-//        ss << ++number;
-//    }
-//    cout << ss.str() << endl;
-
-auto x = 4;
-cout << x << endl;
 return 0;
 
 }
