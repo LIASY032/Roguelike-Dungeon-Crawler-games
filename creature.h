@@ -11,7 +11,7 @@ namespace creature{
         virtual AbstractCreature* clone() = 0;
         virtual std::string name() = 0;
         virtual char displayCharacter() = 0;
-    private:
+    protected:
         std::string _name;
     };
 
@@ -22,8 +22,7 @@ namespace creature{
         AbstractCreature* clone() override;
         std::string name() override;
         char displayCharacter() override;
-    private:
-        std::string _name;
+
     };
 
 

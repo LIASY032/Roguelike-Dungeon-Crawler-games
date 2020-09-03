@@ -7,7 +7,7 @@
 
 class Item
 {
-private:
+protected:
     std::string _name;
 public:
     Item() = default;
@@ -24,8 +24,7 @@ public:
     Weapon(std::string name);
     Item* clone() override;
     std::string name() override;
-private:
-    std::string _name;
+
 };
 
 
@@ -35,8 +34,7 @@ public:
     Consumable(std::string name);
     Item* clone() override;
     std::string name() override;
-private:
-    std::string _name;
+
 };
 
 

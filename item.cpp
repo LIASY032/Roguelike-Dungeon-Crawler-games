@@ -6,8 +6,9 @@ Item::Item(std::string name){
     _name = name;
 }
 
-Weapon::Weapon(std::string name) : _name{name}{
+Weapon::Weapon(std::string name){
 
+    _name = name;
 }
 
 Item* Weapon::clone() {
@@ -19,8 +20,9 @@ std::string Weapon::name(){
     return _name;
 }
 
-Consumable::Consumable(std::string name): _name{name}{
+Consumable::Consumable(std::string name){
 
+    _name = name;
 }
 
 Item* Consumable::clone() {
