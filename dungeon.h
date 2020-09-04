@@ -42,16 +42,31 @@ class RockChamber: public Room{
 
 };
 
+//RoomEdge
+class RoomEdge{
+public:
+    RoomEdge() = default;
+    virtual ~RoomEdge() = 0;
+    virtual std::string description() = 0;
+    virtual char displayCharacter() = 0;
+    bool isPassage();
+protected:
+    char character;
+
+    //store the condition of isPassage, set it fault
+    bool pass = false;
+};
 
 //Doorway
-class Doorway{
+class Doorway : public RoomEdge{
 public:
     Doorway() = default;
-    virtual ~Doorway() = default;
     virtual void connect(Doorway &opposite);
+    std::string description() override;
     bool isEntrance();
     bool isExit();
     int type();
+
 protected:
     //store the connected doorway
     Doorway* _doorway;
@@ -63,6 +78,9 @@ protected:
 
     //distinguish the type of doorway
     int doorwayType = 0;
+
+    //description of the doorway
+    std::string _description;
 };
 
 
@@ -96,6 +114,14 @@ public:
     void setlocked(bool locked);
 private:
     bool _locked;
+};
+
+class Wall: public RoomEdge{
+    Wall() = default;
+    virtual ~Wall() = default;
+    std::string description() override;
+    char displayCharacter() override;
+
 };
 
 }

@@ -28,6 +28,11 @@ void Room::setCreature(AbstractCreature &newCreature){
     _creature = &newCreature;
 }
 
+//RoomEdge
+bool RoomEdge::isPassage(){
+    return pass;
+}
+
 
 //Doorway
 
@@ -48,12 +53,18 @@ int Doorway::type(){
     return doorwayType;
 }
 
+std::string Doorway::description(){
+    return _description;
+}
+
 OneWayDoor::OneWayDoor(){
     doorwayType = 2;
+
 }
 
 void OneWayDoor::connect(Doorway &opposite){
     if (opposite.type() == 1 || opposite.type() == 4){
+        pass = true;
         isConnected = true;
         _doorway = &opposite;
 
@@ -61,9 +72,11 @@ void OneWayDoor::connect(Doorway &opposite){
         //which MUST be an OpenDoorway or LockedDoor
         if (_doorway->isExit()){
             entrance = true;
+            _description = "the entrance (One-Way Door)";
         }
         if (_doorway->isEntrance()){
             exit = true;
+            _description = "an Exit (One-Way Door)";
         }
     }
 }
@@ -72,8 +85,11 @@ OpenDoorway::OpenDoorway(){
     //allows unrestricted movement between rooms
     entrance = true;
     exit = true;
+    pass = true;
 
     doorwayType = 1;
+
+    _description = "an Open Doorway";
 }
 
 void OpenDoorway::connect(Doorway &opposite){
@@ -83,6 +99,7 @@ void OpenDoorway::connect(Doorway &opposite){
 
 BlockedDoorway::BlockedDoorway(){
     doorwayType = 3;
+    _description = "a Block Doorway";
 }
 
 void BlockedDoorway::connect(Doorway &opposite){
@@ -95,12 +112,14 @@ void BlockedDoorway::connect(Doorway &opposite){
 LockedDoor::LockedDoor(){
     doorwayType = 4;
     _locked = false;
+    _description = "a Locked Door";
 }
 
 void LockedDoor::setlocked(bool locked){
     _locked = locked;
     //if the _locked is true, set the exit and the entrance to true
     if (_locked){
+        pass = true;
         entrance = true;
         exit = true;
     }
