@@ -19,7 +19,7 @@ public:
     Room() = default;
     virtual ~Room() = default;
     Room(int id);
-    virtual std::string description() = 0;
+    std::string description();
     virtual std::string display() = 0; // need to be fixed return an Arrays
     int id();
     Item* item();
@@ -31,22 +31,17 @@ protected:
     int _id;
     Item* _item;
     AbstractCreature* _creature;
+    std::string _description = "";
 
 };
 
-class RockChamber: public Room{
-    RockChamber();
-    RockChamber(int id);
-    std::string description() override;
-    std::string display() override;
 
-};
 
 //RoomEdge
 class RoomEdge{
 public:
     RoomEdge() = default;
-    virtual ~RoomEdge() = 0;
+    virtual ~RoomEdge() = default;
     virtual std::string description() = 0;
     virtual char displayCharacter() = 0;
     bool isPassage();
@@ -84,6 +79,8 @@ protected:
 };
 
 
+namespace common {
+
 //a concrete doorway implementation that cannot be entered from the room that contains it,
 //but allows movement from the 'opposite' side which MUST be an OpenDoorway or LockedDoor
 class OneWayDoor: public Doorway{
@@ -116,13 +113,101 @@ private:
     bool _locked;
 };
 
+}
 class Wall: public RoomEdge{
+public:
     Wall() = default;
     virtual ~Wall() = default;
     std::string description() override;
     char displayCharacter() override;
+protected:
+    char _character = '|';
+    std::string _description;
 
 };
+
+
+class DungeonLevel{
+public:
+    DungeonLevel() = default;
+    virtual ~DungeonLevel() = default;
+    DungeonLevel(std::string name, int width, int height);
+    bool addRoom(Room room);
+    Room retrieveRoom(int number);
+    int width();
+    int height();
+    int numberOfRoom = 0;
+    std::string name();
+    virtual std::string description() = 0;
+    std::vector<std::string> display();
+
+};
+
+class DungeonLevelBuilder{
+public:
+    DungeonLevelBuilder() = default;
+    virtual ~DungeonLevelBuilder() = default;
+    void buildDungeonLevel(std::string name, int width, int height);
+    Room buildRoom(int id);
+    void buildDoorway(Room &origin);
+
+};
+
+/**
+ *core::dungeon::basic
+ * the basic namespace contains BasicDungeonLevel, BasicDungeonLevelBuilder,
+ * RockChamber, QuartzChamber, and RockWall
+ */
+namespace basic {
+class BasicDungeonLevel{
+
+};
+
+class BasicDungeonLevelBuilder{
+
+};
+
+class RockChamber: public Room{
+    RockChamber();
+    RockChamber(int id);
+    std::string display() override;
+
+};
+
+
+class QuartzChamber{
+
+};
+
+class RockWall: public Wall{
+    RockWall();
+};
+
+
+}
+
+namespace magical {
+
+class AlchemistsLaboratory{
+
+};
+
+class EnchantedLiboratory{
+
+};
+
+class MagicalDungeonLevel{
+
+};
+
+class MagicalDungeonLevelBuilder{
+
+};
+
+class MagicWall: public Wall{
+    MagicWall();
+};
+}
 
 }
 

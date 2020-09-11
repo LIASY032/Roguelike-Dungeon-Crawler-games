@@ -1,6 +1,7 @@
 #include "dungeon.h"
 
 using namespace dungeon;
+using namespace dungeon::common;
 
 Room::Room(int id){
     _id = id;
@@ -73,10 +74,12 @@ void OneWayDoor::connect(Doorway &opposite){
         if (_doorway->isExit()){
             entrance = true;
             _description = "the entrance (One-Way Door)";
+            character = '<';
         }
         if (_doorway->isEntrance()){
             exit = true;
             _description = "an Exit (One-Way Door)";
+            character = '>';
         }
     }
 }
@@ -90,6 +93,7 @@ OpenDoorway::OpenDoorway(){
     doorwayType = 1;
 
     _description = "an Open Doorway";
+    character = '>';
 }
 
 void OpenDoorway::connect(Doorway &opposite){
@@ -100,6 +104,7 @@ void OpenDoorway::connect(Doorway &opposite){
 BlockedDoorway::BlockedDoorway(){
     doorwayType = 3;
     _description = "a Block Doorway";
+    character = 'X';
 }
 
 void BlockedDoorway::connect(Doorway &opposite){
@@ -127,9 +132,29 @@ void LockedDoor::setlocked(bool locked){
 void LockedDoor::connect(Doorway &opposite){
     isConnected = true;
     _doorway = &opposite;
+    character = '@';
 }
 
 
 
 
+std::string Wall::description(){
+    return _description;
 
+}
+
+char Wall::displayCharacter(){
+    return _character;
+}
+
+
+using namespace dungeon::basic;
+RockWall::RockWall(){
+    _description = "Rock Wall";
+}
+
+
+using namespace dungeon::magical;
+MagicWall::MagicWall(){
+    _description = "Magic Wall";
+}
