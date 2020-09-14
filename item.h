@@ -14,7 +14,8 @@ public:
     Item(std::string name);
     virtual ~Item() = default;
     virtual Item* clone() = 0;
-    virtual std::string name() = 0;
+    std::string name();
+    char displayCharacter();
 
 };
 
@@ -23,7 +24,6 @@ public:
     Weapon() = default;
     Weapon(std::string name);
     Item* clone() override;
-    std::string name() override;
 
 };
 
@@ -33,7 +33,6 @@ public:
     Consumable() = default;
     Consumable(std::string name);
     Item* clone() override;
-    std::string name() override;
 
 };
 

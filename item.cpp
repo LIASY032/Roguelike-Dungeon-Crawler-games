@@ -16,8 +16,12 @@ Item* Weapon::clone() {
     return new Weapon;
 }
 
-std::string Weapon::name(){
+std::string Item::name(){
     return _name;
+}
+
+char Item::displayCharacter(){
+    return 'L';
 }
 
 Consumable::Consumable(std::string name){
@@ -29,6 +33,4 @@ Item* Consumable::clone() {
     return new Consumable;
 }
 
-std::string Consumable::name(){
-    return _name;
-}
+

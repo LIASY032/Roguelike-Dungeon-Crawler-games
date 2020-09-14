@@ -4,6 +4,7 @@
 #include <string>
 #include "item.h"
 #include "creature.h"
+
 using namespace creature;
 namespace dungeon {
 enum class Direction: unsigned{
@@ -20,7 +21,7 @@ public:
     virtual ~Room() = default;
     Room(int id);
     std::string description();
-    virtual std::string display() = 0; // need to be fixed return an Arrays
+    virtual std::string* display() = 0; // need to be fixed return an Arrays
     int id();
     Item* item();
     void setItem(Item &newItem);
@@ -136,7 +137,7 @@ public:
     Room retrieveRoom(int number);
     int width();
     int height();
-    int numberOfRoom = 0;
+    int numberOfRooms = 0;
     std::string name();
     virtual std::string description() = 0;
     std::vector<std::string> display();
@@ -149,7 +150,7 @@ public:
     virtual ~DungeonLevelBuilder() = default;
     void buildDungeonLevel(std::string name, int width, int height);
     Room buildRoom(int id);
-    void buildDoorway(Room &origin);
+    void buildDoorway(Room origin, Room destination);
 
 };
 
@@ -159,24 +160,30 @@ public:
  * RockChamber, QuartzChamber, and RockWall
  */
 namespace basic {
-class BasicDungeonLevel{
+class BasicDungeonLevel: public DungeonLevel{
 
+    BasicDungeonLevel();
+    std::string description() override;
 };
 
-class BasicDungeonLevelBuilder{
+class BasicDungeonLevelBuilder: public DungeonLevelBuilder{
+    BasicDungeonLevelBuilder();
 
 };
 
 class RockChamber: public Room{
     RockChamber();
     RockChamber(int id);
-    std::string display() override;
+    std::string* display() override;
 
 };
 
 
-class QuartzChamber{
+class QuartzChamber:public Room{
 
+    QuartzChamber();
+    QuartzChamber(int id);
+    std::string* display() override;
 };
 
 class RockWall: public Wall{
@@ -188,19 +195,30 @@ class RockWall: public Wall{
 
 namespace magical {
 
-class AlchemistsLaboratory{
+class AlchemistsLaboratory: public Room{
+
+    AlchemistsLaboratory();
+    AlchemistsLaboratory(int id);
+    std::string * display() override;
 
 };
 
-class EnchantedLiboratory{
+class EnchantedLiboratory:public Room{
 
+    EnchantedLiboratory();
+    EnchantedLiboratory(int id);
+    std::string * display() override;
 };
 
-class MagicalDungeonLevel{
+class MagicalDungeonLevel: public DungeonLevel{
 
+    MagicalDungeonLevel();
+    std::string description() override;
 };
 
-class MagicalDungeonLevelBuilder{
+class MagicalDungeonLevelBuilder: public DungeonLevelBuilder{
+
+    MagicalDungeonLevelBuilder();
 
 };
 
@@ -210,6 +228,33 @@ class MagicWall: public Wall{
 }
 
 }
+using namespace dungeon;
+
+class Game{
+private:
+    Game();
+    static Game* the_Instance;
+    std::shared_ptr<DungeonLevelBuilder> levelBuilder;
+public:
+    ~Game() = default;
+    static Game* instance();
+    void setDungeonType(DungeonLevelBuilder _levelBuilder);
+    void createExampleLevel();
+    void createRandomLevel(std::string name, int witch, int height);
+    void displayLevel();
+    double randomDouble();
+
+
+};
+
+class MenuInterface{
+public:
+    MenuInterface() = default;
+    ~MenuInterface() = default;
+    MenuInterface(std::ostream display, std::istream input);
+    void displayWelcome(std::string author, std::string title);
+    void run();
+};
 
 
 #endif // ROOM_H
