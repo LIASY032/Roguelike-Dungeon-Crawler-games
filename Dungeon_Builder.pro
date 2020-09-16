@@ -19,7 +19,9 @@ SOURCES += \
         creature.cpp \
         dungeon.cpp \
         item.cpp \
-        main.cpp
+        main.cpp \
+        room.cpp \
+        roomedge.cpp
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -30,4 +32,6 @@ HEADERS += \
     core.h \
     creature.h \
     dungeon.h \
-    item.h
+    item.h \
+    room.h \
+    roomedge.h

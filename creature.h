@@ -10,9 +10,13 @@ namespace creature{
         virtual ~AbstractCreature() = default;
         virtual AbstractCreature* clone() = 0;
         virtual std::string name() = 0;
-        virtual char displayCharacter() = 0;
+        char displayCharacter();
+        bool getBoss();
+        void setBoss(bool _boss);
     protected:
         std::string _name;
+        bool boss = false;
+        char _character =' ';
     };
 
     class Monster : public AbstractCreature{
@@ -21,7 +25,6 @@ namespace creature{
         Monster(std::string name);
         AbstractCreature* clone() override;
         std::string name() override;
-        char displayCharacter() override;
 
     };
 

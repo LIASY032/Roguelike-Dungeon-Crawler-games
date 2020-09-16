@@ -8,7 +8,7 @@
 class Item
 {
 protected:
-    std::string _name;
+    std::string _name = " ";
 public:
     Item() = default;
     Item(std::string name);

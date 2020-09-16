@@ -10,18 +10,28 @@ AbstractCreature::AbstractCreature(std::string name){
 
 Monster::Monster(std::string name){
     _name = name;
+    _character = 'M';
 }
 
 AbstractCreature* Monster::clone(){
-    return new Monster;
+    return new Monster(_name);
 }
 
+void AbstractCreature::setBoss(bool _boss){
+    boss = _boss;
+}
+
+bool AbstractCreature::getBoss(){
+    return boss;
+}
+
+char AbstractCreature::displayCharacter(){
+    return _character;
+}
 std::string Monster::name(){
     return _name;
 }
 
 
-//need to be fixed later
-char Monster::displayCharacter(){
-    return 's';
-}
+
+
