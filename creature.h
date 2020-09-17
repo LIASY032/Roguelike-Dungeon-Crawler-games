@@ -16,7 +16,7 @@ namespace creature{
     protected:
         std::string _name;
         bool boss = false;
-        char _character =' ';
+        char _character ='M';
     };
 
     class Monster : public AbstractCreature{
