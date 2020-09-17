@@ -7,6 +7,7 @@
 #include "item.h"
 #include "creature.h"
 #include "room.h"
+#include <vector>
 
 
 using namespace std;
@@ -14,12 +15,13 @@ int main()
 {
     OneWayDoor oneWay;
     OpenDoorway open;
+    open.setDirection(Direction::North);
 
 
     RoomEdge* edge = &oneWay;
 
     edge->setDirection(Direction::East);
-    oneWay.connect(open);
+//    oneWay.connect(open);
     cout << edge->description() << "return character " << edge->displayCharacter()<<endl;
 
     BlockedDoorway blocked;
@@ -28,7 +30,7 @@ int main()
     cout << edge->description() << "return character " << edge->displayCharacter()<<endl;
 
     edge = &open;
-    edge->setDirection(Direction::North);
+
     cout << edge->description() << "return character " << edge->displayCharacter()<<endl;
 
     LockedDoor locked;
@@ -43,7 +45,7 @@ int main()
 
     MagicWall magic;
     edge = &magic;
-    edge->setDirection(Direction::East);
+    edge->setDirection(Direction::South);
     cout << edge->description() << "return character " << edge->displayCharacter()<<endl;
 
 
@@ -57,27 +59,23 @@ int main()
 
     using namespace creature;
     AbstractCreature* create;
-    Monster monster("我爱罗");
+    Monster monster("阿巴斯");
     create = monster.clone();
     cout << create->name() << "   " << create->displayCharacter() << endl;
 
 
+
     RockChamber rockChamber{1};
-    rockChamber.setItem(*item);
-    rockChamber.setCreature(*create);
+//    rockChamber.setItem(*item);
+//    rockChamber.setCreature(*create);
     rockChamber.setEastEdge(oneWay);
     rockChamber.setWestEdge(open);
     rockChamber.setNorthEdge(locked);
     rockChamber.setSouthEdge(blocked);
     string output = "";
 
-    for (int i = 0; i < 35; ++i){
-        if (i == 6 || i == 13|| i == 20 || i == 27){
-            output = output + rockChamber.display()[i] + '\n';
-        }else{
-            output = output + rockChamber.display()[i];
-
-        }
+    for (int i = 0; i < 5; ++i){
+        cout << rockChamber.display()->at(i) << endl;
     }
     cout << output << endl;
     return 0;

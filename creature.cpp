@@ -10,7 +10,6 @@ AbstractCreature::AbstractCreature(std::string name){
 
 Monster::Monster(std::string name){
     _name = name;
-    _character = 'M';
 }
 
 AbstractCreature* Monster::clone(){
@@ -28,6 +27,8 @@ bool AbstractCreature::getBoss(){
 char AbstractCreature::displayCharacter(){
     return _character;
 }
+
+
 std::string Monster::name(){
     return _name;
 }

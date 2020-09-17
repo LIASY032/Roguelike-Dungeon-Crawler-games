@@ -68,19 +68,19 @@ void OneWayDoor::setDirection(Direction _direction){
     direction = _direction;
     switch (direction) {
     case Direction::North:
-        character ='v';
+        character ='I';
         _description = "the entrance (One-Way Door) to the dungeon level";
         break;
     case Direction::South:
-        character = 'v';
+        character = 'O';
         _description = "an Exit (One-Way Door) to the dungeon level";
         break;
     case Direction::East:
-        character = '>';
+        character = 'I';
         _description = "the entrance (One-Way Door) to the dungeon level";
         break;
     case Direction::West:
-        character = '>';
+        character = 'O';
         _description = "an Exit (One-Way Door) to the dungeon level";
         break;
     }
@@ -108,6 +108,7 @@ OpenDoorway::OpenDoorway(){
     exit = true;
     pass = true;
 
+    _description = "Open Doorway to another chamber";
     doorwayType = 1;
 
 

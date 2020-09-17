@@ -5,6 +5,7 @@
 #include "creature.h"
 using namespace creature;
 #include <iostream>
+#include <vector>
 
 class Room
 {
@@ -13,7 +14,7 @@ public:
     virtual ~Room() = default;
     Room(int id);
     std::string description();
-    std::string* display();
+    std::vector<std::string>* display();
     int id();
     Item* item();
     void setItem(Item &newItem);
@@ -35,6 +36,7 @@ protected:
     RoomEdge* eastEdge;
     RoomEdge* westEdge;
     std::string output[35];
+    std::vector<std::string> _output;
 
 };
 

@@ -17,6 +17,7 @@ public:
     std::string name();
     char displayCharacter();
 
+
 };
 
 class Weapon : public Item{

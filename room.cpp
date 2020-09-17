@@ -7,7 +7,7 @@ int Room::id(){
     return _id;
 }
 
-std::string* Room::display(){
+std::vector<std::string>* Room::display(){
 
     for (int i = 0; i < 35; ++i){
         switch (i) {
@@ -33,24 +33,65 @@ std::string* Room::display(){
             output[i] = southEdge->displayCharacter();
             break;
         case 16:
-            output[i] = _creature->displayCharacter();
+            if (_creature){
+                output[i] = _creature->displayCharacter();
+            }else{
+                output[i] = ' ';
+            }
+            break;
         case 17:
-            if (_creature->getBoss()){
-                output[i] = '*';
+            if (_creature){
+                if (_creature->getBoss()){
+                    output[i] = '*';
+                }else{
+                    output[i] = ' ';
+                }
             }else{
                 output[i] = ' ';
             }
             break;
         case 18:
-            output[i] = _item->displayCharacter();
+            if (_item){
+                output[i] = _item->displayCharacter();
+            }else{
+                output[i] = ' ';
+            }
             break;
         default:
             output[i] = ' ';
-
-
         }
     }
-    return output;
+
+
+    std::string item = " ";
+    std::string creature = "  ";
+    if (_item){
+        item = (char) _item->displayCharacter();
+    }
+    if (_creature){
+        if (_creature->getBoss()){
+            creature = "M*";
+        }else{
+            creature = "M ";
+        }
+    }
+    std::string north;
+    north = (char) northEdge->displayCharacter();
+    std::string east;
+    east = (char) eastEdge->displayCharacter();
+    std::string south;
+    south = (char) southEdge->displayCharacter();
+    std::string west;
+    west = (char) westEdge->displayCharacter();
+    std::string line = "|     |";
+    _output.push_back("+--" + north + "--+");
+    _output.push_back(line);
+    _output.push_back(west + " " + creature + item + " " + east);
+    _output.push_back(line);
+    _output.push_back("+--" + south + "--+");
+
+
+    return &_output;
 }
 
 Item* Room::item(){
@@ -71,18 +112,40 @@ void Room::setCreature(AbstractCreature &newCreature){
 
 void Room::setEastEdge(RoomEdge &edge){
     eastEdge = &edge;
+    eastEdge->setDirection(Direction::East);
 }
 
 void Room::setWestEdge(RoomEdge &edge){
     westEdge = &edge;
+    westEdge->setDirection(Direction::West);
 }
 
 void Room::setNorthEdge(RoomEdge &edge){
     northEdge = &edge;
+    northEdge->setDirection(Direction::North);
 }
 
 void Room::setSouthEdge(RoomEdge &edge){
     southEdge = &edge;
+    southEdge->setDirection(Direction::South);
+}
+
+std::string Room::description(){
+    _description = _description + '\n' + northEdge->description() +
+                   '\n' + southEdge->description() + '\n' +
+                   eastEdge->description() + '\n' +
+                   westEdge->description() + '\n';
+    if (_creature){
+        if (_creature->getBoss()){
+            _description = _description + "There is a BOSS " + _creature->name() + "to fight\n";
+        }else{
+            _description = _description + "There is a " + _creature->name() + "to fight\n";
+        }
+    }
+    if (_item){
+        _description = _description + "There is a " + _item->name() + " to pick up\n";
+    }
+    return _description;
 }
 
 RockChamber::RockChamber(int id){
