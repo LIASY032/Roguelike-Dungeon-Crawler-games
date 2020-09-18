@@ -6,14 +6,14 @@ DungeonLevel::DungeonLevel(std::string name, int width, int height){
     _height = height;
 }
 
-bool DungeonLevel::addRoom(Room room){// need to be fixed
-    rooms.insert({index, room});
-    ++index;
+bool DungeonLevel::addRoom(Room room){
+    rooms.push_back(room);
+
     return true;
 }
 
 Room DungeonLevel::retrieveRoom(int number){
-    return rooms.at(number);//not sure
+    return rooms.at(number);
 }
 
 int DungeonLevel::width(){
@@ -29,8 +29,24 @@ std::string DungeonLevel::name(){
 }
 
 std::vector<std::string>* DungeonLevel::display(){
-    _number = 8 * _width;//maybe it shall be deleted
-    std::string output = "";
+
+//    for (int i = 0; i < _height * 6; ++i){
+//        _display.push_back("");
+//    }
+
+    std::string input = "";
+    int count = 0;
+    for (int i = 0; i < _height * 6; ++i){
+         _display.push_back("");
+        for (int column = 0; column < _width; ++column){
+            input = input + rooms.at(column).display()->at(i%6);
+        }
+        if (i%6 == 0){
+            ++count;
+        }
+        _display.at(i) = input;
+        input = "";
+    }
 
 
     return &_display;

@@ -25,6 +25,12 @@ public:
     void setEastEdge(RoomEdge &edge);
     void setWestEdge(RoomEdge &edge);
 
+    RoomEdge* getNorthEdge();
+    RoomEdge* getSouthEdge();
+    RoomEdge* getEastEdge();
+    RoomEdge* getWestEdge();
+
+
 
 protected:
     int _id;
@@ -35,7 +41,6 @@ protected:
     RoomEdge* southEdge;
     RoomEdge* eastEdge;
     RoomEdge* westEdge;
-    std::string output[35];
     std::vector<std::string> _output;
 
 };

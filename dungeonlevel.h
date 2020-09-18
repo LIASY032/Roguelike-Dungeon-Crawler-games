@@ -26,7 +26,7 @@ protected:
     int _number;
     std::vector<std::string> _display;
     int index = 1;
-    std::map<int, Room> rooms;
+    std::vector<Room> rooms;
     std::string _description = "";
 
 };

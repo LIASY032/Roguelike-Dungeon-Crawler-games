@@ -59,33 +59,33 @@ int Doorway::type(){
 
 OneWayDoor::OneWayDoor(){
     doorwayType = 2;
-    pass = true;
-
-
 }
 
 void OneWayDoor::setDirection(Direction _direction){
     direction = _direction;
-    switch (direction) {
-    case Direction::North:
-        character ='I';
-        _description = "the entrance (One-Way Door) to the dungeon level";
-        break;
-    case Direction::South:
-        character = 'O';
-        _description = "an Exit (One-Way Door) to the dungeon level";
-        break;
-    case Direction::East:
-        character = 'I';
-        _description = "the entrance (One-Way Door) to the dungeon level";
-        break;
-    case Direction::West:
-        character = 'O';
-        _description = "an Exit (One-Way Door) to the dungeon level";
-        break;
+    if (!_doorway){
+        switch (direction) {
+        case Direction::North:
+            character ='I';
+            _description = "the entrance (One-Way Door) to the dungeon level";
+            break;
+        case Direction::South:
+            character = 'O';
+            _description = "an Exit (One-Way Door) to the dungeon level";
+            break;
+        case Direction::East:
+            character = 'I';
+            _description = "the entrance (One-Way Door) to the dungeon level";
+            break;
+        case Direction::West:
+            character = 'O';
+            _description = "an Exit (One-Way Door) to the dungeon level";
+            break;
+        }
     }
 }
 void OneWayDoor::connect(Doorway &opposite){
+    pass = true;
     if (opposite.type() == 1 || opposite.type() == 4){
         isConnected = true;
         _doorway = &opposite;
@@ -141,17 +141,21 @@ BlockedDoorway::BlockedDoorway(){
     doorwayType = 3;
     _description = "a Block Doorway to another chamber.";
     character = 'X';
+    pass = true;
 }
 
 void BlockedDoorway::setDirection(Direction _direction){
     direction = _direction;
+    pass =true;
 }
 
 void BlockedDoorway::connect(Doorway &opposite){
         if (opposite.type() == 3){
             isConnected = true;
             _doorway = &opposite;
+
         }
+        pass =true;
 }
 
 LockedDoor::LockedDoor(){

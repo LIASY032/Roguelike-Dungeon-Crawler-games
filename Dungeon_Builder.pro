@@ -19,6 +19,7 @@ SOURCES += \
         creature.cpp \
         dungeon.cpp \
         dungeonlevel.cpp \
+        dungeonlevelbuilder.cpp \
         item.cpp \
         main.cpp \
         room.cpp \
@@ -34,6 +35,7 @@ HEADERS += \
     creature.h \
     dungeon.h \
     dungeonlevel.h \
+    dungeonlevelbuilder.h \
     item.h \
     room.h \
     roomedge.h

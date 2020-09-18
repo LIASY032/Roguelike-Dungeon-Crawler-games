@@ -8,6 +8,7 @@
 #include "creature.h"
 #include "room.h"
 #include <vector>
+#include "dungeonlevel.h"
 
 
 using namespace std;
@@ -21,7 +22,7 @@ int main()
     RoomEdge* edge = &oneWay;
 
     edge->setDirection(Direction::East);
-//    oneWay.connect(open);
+
     cout << edge->description() << "return character " << edge->displayCharacter()<<endl;
 
     BlockedDoorway blocked;
@@ -62,22 +63,38 @@ int main()
     Monster monster("阿巴斯");
     create = monster.clone();
     cout << create->name() << "   " << create->displayCharacter() << endl;
+//    oneWay.connect(open);
 
-
-
+//    blocked.connect(blocked);
     RockChamber rockChamber{1};
-//    rockChamber.setItem(*item);
-//    rockChamber.setCreature(*create);
-    rockChamber.setEastEdge(oneWay);
+    rockChamber.setItem(*item);
+    rockChamber.setCreature(*create);
+    rockChamber.setEastEdge(blocked);
     rockChamber.setWestEdge(open);
     rockChamber.setNorthEdge(locked);
-    rockChamber.setSouthEdge(blocked);
+    rockChamber.setSouthEdge(oneWay);
+
     string output = "";
 
-    for (int i = 0; i < 5; ++i){
+    for (int i = 0; i < 6; ++i){
         cout << rockChamber.display()->at(i) << endl;
+
     }
-    cout << output << endl;
+
+
+
+
+    BasicDungeonLevel basic{"audan", 2, 2};
+    basic.addRoom(rockChamber);
+    basic.addRoom(rockChamber);
+    basic.addRoom(rockChamber);
+    basic.addRoom(rockChamber);
+
+    for (int i = 0; i < 12; ++i){
+        cout << basic.display()->at(i) << endl;
+
+    }
+
     return 0;
 
 }
