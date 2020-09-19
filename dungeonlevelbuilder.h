@@ -9,7 +9,6 @@
 
 class DungeonLevelBuilder{
 public:
-
     enum class MoveConstraints: unsigned{
         None = 0,
         OriginImpassable = 1,
@@ -17,16 +16,15 @@ public:
         OriginLocked = 4,
         Destinationlocked = 8
     };
-
     DungeonLevelBuilder() = default;
     virtual ~DungeonLevelBuilder() = default;
-    virtual void buildDungeonLevel(std::string name, int width, int height);
-    virtual Room* buildRoom(int id);
-    virtual void buildDoorway(Room &origin, Room &destination, Direction direction, DungeonLevelBuilder::MoveConstraints constraints);
-    virtual void buildEntrance(Room &room, Direction direction);
-    virtual void buildExit(Room &room, Direction direction);
-    virtual void buildItem(Room &room);
-    virtual void buildCreature(Room &room);
+    virtual void buildDungeonLevel(std::string name, int width, int height) = 0;
+    virtual Room* buildRoom(int id) = 0;
+    virtual void buildDoorway(Room &origin, Room &destination, Direction direction, DungeonLevelBuilder::MoveConstraints constraints) = 0;
+    virtual void buildEntrance(Room &room, Direction direction) = 0;
+    virtual void buildExit(Room &room, Direction direction) = 0;
+    virtual void buildItem(Room &room) = 0;
+    virtual void buildCreature(Room &room) = 0;
     DungeonLevel* getDungeonLevel();
     int generateRandomNumber(int number);
 protected:

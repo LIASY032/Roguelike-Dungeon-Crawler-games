@@ -84,7 +84,25 @@ void OneWayDoor::setDirection(Direction _direction){
         }
     }
 
-    if (_doorway->type() == 4){
+
+}
+void OneWayDoor::connect(Doorway &opposite){
+    pass = true;
+    if (opposite.type() == 1){
+        _description = "One-Way Door to another chamber";
+        isConnected = true;
+        _doorway = &opposite;
+        if (_doorway->isEntrance()){
+            entrance = true;
+        }
+        if (_doorway->isExit()){
+            exit = true;
+        }
+        character = opposite.displayCharacter();
+
+    }else if (_doorway->type() == 4){
+        _description = "One-Way Door to another chamber";
+        isConnected = true;
         switch (direction) {
         case Direction::North:
             character ='^';
@@ -101,23 +119,6 @@ void OneWayDoor::setDirection(Direction _direction){
         default:
             character = '<';
         }
-    }
-}
-void OneWayDoor::connect(Doorway &opposite){
-    pass = true;
-    if (opposite.type() == 1 || opposite.type() == 4){
-        isConnected = true;
-        _doorway = &opposite;
-        if (_doorway->isEntrance()){
-            entrance = true;
-            _description = "One-Way Door to another chamber";
-        }
-        if (_doorway->isExit()){
-            exit = true;
-            _description = "One-Way Door to another chamber";
-        }
-        character = opposite.displayCharacter();
-
     }
 }
 

@@ -13,10 +13,17 @@ int DungeonLevelBuilder::generateRandomNumber(int number){
 void MagicalDungeonLevelBuilder::buildDungeonLevel(std::string name, int width, int height){
     MagicalDungeonLevel _level(name, width, height);
     level = &_level;
+    for (int i = 0; i < width * height; ++i){
+        level->addRoom(*MagicalDungeonLevelBuilder::buildRoom(i));
+    }
 }
 
 Room* MagicalDungeonLevelBuilder::buildRoom(int id){
     Room* room;
+    MagicWall eastWall;
+    MagicWall westWall;
+    MagicWall northWall;
+    MagicWall southWall;
     int number = generateRandomNumber(2);
     if (number == 0){
         EnchantedLiboratory enchant{id};
@@ -25,6 +32,10 @@ Room* MagicalDungeonLevelBuilder::buildRoom(int id){
         AlchemistsLaboratory alchemist{id};
         room = &alchemist;
     }
+    room->setEastEdge(eastWall);
+    room->setWestEdge(westWall);
+    room->setNorthEdge(northWall);
+    room->setSouthEdge(southWall);
 
     return room;
 }
@@ -188,10 +199,17 @@ void MagicalDungeonLevelBuilder::buildCreature(Room &room){
 void BasicDungeonLevelBuilder::buildDungeonLevel(std::string name, int width, int height){
     BasicDungeonLevel _level{name, width, height};
     level = &_level;
+    for (int i = 0; i < width * height; ++i){
+        level->addRoom(*BasicDungeonLevelBuilder::buildRoom(i));
+    }
 }
 
 Room* BasicDungeonLevelBuilder::buildRoom(int id){
     Room* room;
+    RockWall eastWall;
+    RockWall westWall;
+    RockWall northWall;
+    RockWall southWall;
     int number = generateRandomNumber(2);
     if (number == 0){
         RockChamber enchant{id};
@@ -200,6 +218,11 @@ Room* BasicDungeonLevelBuilder::buildRoom(int id){
         QuartzChamber alchemist{id};
         room = &alchemist;
     }
+
+    room->setEastEdge(eastWall);
+    room->setWestEdge(westWall);
+    room->setNorthEdge(northWall);
+    room->setSouthEdge(southWall);
 
     return room;
 }

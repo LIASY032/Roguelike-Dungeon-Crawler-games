@@ -9,9 +9,9 @@
 #include "room.h"
 #include <vector>
 #include "dungeonlevel.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include<time.h>
+//#include <stdio.h>
+//#include <stdlib.h>
+//#include <time.h>
 
 
 using namespace std;
@@ -66,9 +66,9 @@ int main()
     Monster monster("阿巴斯");
     create = monster.clone();
     cout << create->name() << "   " << create->displayCharacter() << endl;
-//    oneWay.connect(open);
+    oneWay.connect(open);
 
-//    blocked.connect(blocked);
+    blocked.connect(blocked);
     RockChamber rockChamber{1};
     rockChamber.setItem(*item);
     rockChamber.setCreature(*create);
