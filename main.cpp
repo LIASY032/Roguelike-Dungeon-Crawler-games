@@ -9,6 +9,9 @@
 #include "room.h"
 #include <vector>
 #include "dungeonlevel.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include<time.h>
 
 
 using namespace std;
@@ -84,17 +87,27 @@ int main()
 
 
 
-    BasicDungeonLevel basic{"audan", 2, 2};
+    BasicDungeonLevel basic{"audan", 3, 3};
+    basic.addRoom(rockChamber);
+    basic.addRoom(rockChamber);
+    basic.addRoom(rockChamber);
+    basic.addRoom(rockChamber);
+    basic.addRoom(rockChamber);
     basic.addRoom(rockChamber);
     basic.addRoom(rockChamber);
     basic.addRoom(rockChamber);
     basic.addRoom(rockChamber);
 
-    for (int i = 0; i < 12; ++i){
+    for (int i = 0; i < 18; ++i){
         cout << basic.display()->at(i) << endl;
 
     }
 
+    cout << basic.description() << endl;
+    srand(time(0));
+
+    for(int i = 0; i<4; i++)
+        printf(" %d ", rand());
     return 0;
 
 }

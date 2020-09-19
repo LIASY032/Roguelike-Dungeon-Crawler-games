@@ -28,7 +28,7 @@ std::string RoomEdge::description(){
     case Direction::North:
         output = "North ";
         break;
-        default:
+    default:
         output = "South ";
 
 
@@ -81,6 +81,25 @@ void OneWayDoor::setDirection(Direction _direction){
             character = 'O';
             _description = "an Exit (One-Way Door) to the dungeon level";
             break;
+        }
+    }
+
+    if (_doorway->type() == 4){
+        switch (direction) {
+        case Direction::North:
+            character ='^';
+
+            break;
+        case Direction::South:
+            character = 'v';
+
+            break;
+        case Direction::East:
+            character = '>';
+
+            break;
+        default:
+            character = '<';
         }
     }
 }
