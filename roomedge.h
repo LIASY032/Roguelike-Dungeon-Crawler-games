@@ -40,7 +40,7 @@ public:
 
 protected:
     //store the connected doorway
-    Doorway* _doorway;
+    Doorway* _doorway = 0;
 
     //the default of the doorway is not connected, entrance, and exit.
     bool isConnected = false;

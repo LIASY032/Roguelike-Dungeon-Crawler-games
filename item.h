@@ -16,7 +16,8 @@ public:
     virtual Item* clone() = 0;
     std::string name();
     char displayCharacter();
-
+protected:
+    char _character = ' ';
 
 };
 

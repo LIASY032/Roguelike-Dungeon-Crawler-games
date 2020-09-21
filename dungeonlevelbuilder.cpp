@@ -2,7 +2,8 @@
 
 
 DungeonLevel* DungeonLevelBuilder::getDungeonLevel(){
-    return level;
+
+    return level.get();
 }
 
 int DungeonLevelBuilder::generateRandomNumber(int number){
@@ -11,33 +12,37 @@ int DungeonLevelBuilder::generateRandomNumber(int number){
 }
 
 void MagicalDungeonLevelBuilder::buildDungeonLevel(std::string name, int width, int height){
-    MagicalDungeonLevel _level(name, width, height);
-    level = &_level;
-    for (int i = 0; i < width * height; ++i){
-        level->addRoom(*MagicalDungeonLevelBuilder::buildRoom(i));
+
+
+    level = std::unique_ptr<DungeonLevel> (new MagicalDungeonLevel{name, width, height});
+
+    for (int i = 0; i < level->numberOfRooms; ++i){
+
+        level->addRoom(*buildRoom(i));
+    }
+
+}
+
+void MagicalDungeonLevelBuilder::fillLevel(){
+    std::cout << "fille level" << level->numberOfRooms << std::endl;
+    for (int i = 0; i < level->numberOfRooms; ++i){
+        std::cout << "fille level" << std::endl;
+        level->addRoom(*buildRoom(i));
     }
 }
 
+
+
 Room* MagicalDungeonLevelBuilder::buildRoom(int id){
-    Room* room;
-    MagicWall eastWall;
-    MagicWall westWall;
-    MagicWall northWall;
-    MagicWall southWall;
     int number = generateRandomNumber(2);
     if (number == 0){
-        EnchantedLiboratory enchant{id};
-        room = &enchant;
-    }else{
-        AlchemistsLaboratory alchemist{id};
-        room = &alchemist;
-    }
-    room->setEastEdge(eastWall);
-    room->setWestEdge(westWall);
-    room->setNorthEdge(northWall);
-    room->setSouthEdge(southWall);
+        return new EnchantedLiboratory(id);
 
-    return room;
+    }else{
+
+        return new AlchemistsLaboratory(id);
+    }
+
 }
 
 void MagicalDungeonLevelBuilder::buildDoorway(Room &origin, Room &destination, Direction direction, DungeonLevelBuilder::MoveConstraints constraints){
@@ -198,11 +203,15 @@ void MagicalDungeonLevelBuilder::buildCreature(Room &room){
 
 void BasicDungeonLevelBuilder::buildDungeonLevel(std::string name, int width, int height){
     BasicDungeonLevel _level{name, width, height};
-    level = &_level;
-    for (int i = 0; i < width * height; ++i){
+//    level = &_level;
+
+}
+void BasicDungeonLevelBuilder::fillLevel(){
+    for (int i = 0; i < level->numberOfRooms; ++i){
         level->addRoom(*BasicDungeonLevelBuilder::buildRoom(i));
     }
 }
+
 
 Room* BasicDungeonLevelBuilder::buildRoom(int id){
     Room* room;

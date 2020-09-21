@@ -34,13 +34,13 @@ public:
 
 protected:
     int _id;
-    Item* _item;
-    AbstractCreature* _creature;
+    std::unique_ptr<Item> _item = 0;
+    std::unique_ptr<AbstractCreature> _creature = 0;
     std::string _description = "";
-    RoomEdge* northEdge;
-    RoomEdge* southEdge;
-    RoomEdge* eastEdge;
-    RoomEdge* westEdge;
+    std::unique_ptr<RoomEdge> northEdge = 0;
+    std::unique_ptr<RoomEdge> southEdge = 0;
+    std::unique_ptr<RoomEdge> eastEdge = 0;
+    std::unique_ptr<RoomEdge> westEdge = 0;
     std::vector<std::string> _output;
 
 };

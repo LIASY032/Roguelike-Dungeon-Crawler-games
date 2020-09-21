@@ -5,7 +5,8 @@
 #include "dungeonlevel.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include<time.h>
+#include <time.h>
+
 
 class DungeonLevelBuilder{
 public:
@@ -25,11 +26,12 @@ public:
     virtual void buildExit(Room &room, Direction direction) = 0;
     virtual void buildItem(Room &room) = 0;
     virtual void buildCreature(Room &room) = 0;
+    virtual void fillLevel() = 0;
     DungeonLevel* getDungeonLevel();
     int generateRandomNumber(int number);
 protected:
 
-    DungeonLevel* level;
+    std::unique_ptr<DungeonLevel> level = 0;
     Consumable hpotion{"Health Potion"};
     Consumable cocktail{"Molotov Cocktail"};
     Consumable rpotion{"Resistance potion"};
@@ -56,6 +58,7 @@ public:
     void buildExit(Room &room, Direction direction) override;
     void buildItem(Room &room) override;
     void buildCreature(Room &room) override;
+    void fillLevel() override;
 };
 
 class BasicDungeonLevelBuilder: public DungeonLevelBuilder{
@@ -68,6 +71,7 @@ public:
     void buildExit(Room &room, Direction direction) override;
     void buildItem(Room &room) override;
     void buildCreature(Room &room) override;
+    void fillLevel() override;
 };
 
 #endif // DUNGEONLEVELBUILDER_H

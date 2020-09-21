@@ -4,16 +4,19 @@ DungeonLevel::DungeonLevel(std::string name, int width, int height){
     _name = name;
     _width = width;
     _height = height;
+    rooms.resize(width * height);
+    numberOfRooms = width * height;
+
 }
 
-bool DungeonLevel::addRoom(Room room){
-    rooms.push_back(room);
-
+bool DungeonLevel::addRoom(Room &room){
+    rooms.at(index) = std::unique_ptr<Room> (&room) ;
+    ++index;
     return true;
 }
 
-Room DungeonLevel::retrieveRoom(int number){
-    return rooms.at(number);
+Room* DungeonLevel::retrieveRoom(int number){
+    return rooms.at(number).get();
 }
 
 int DungeonLevel::width(){
@@ -30,16 +33,14 @@ std::string DungeonLevel::name(){
 
 std::vector<std::string>* DungeonLevel::display(){
 
-//    for (int i = 0; i < _height * 6; ++i){
-//        _display.push_back("");
-//    }
-
     std::string input = "";
     int count = 0;
+
     for (int i = 0; i < _height * 6; ++i){
          _display.push_back("");
         for (int column = 0; column < _width; ++column){
-            input = input + rooms.at(column).display()->at(i%6);
+            input = input + rooms.at(column)->display()->at(i%6);
+
         }
         if (i%6 == 0){
             ++count;
@@ -60,6 +61,8 @@ BasicDungeonLevel::BasicDungeonLevel(std::string name, int width, int height){
     _name = name;
     _width = width;
     _height = height;
+    numberOfRooms = width * height;
+    rooms.resize(width * height);
 }
 
 std::string BasicDungeonLevel::description(){
@@ -73,6 +76,8 @@ MagicalDungeonLevel::MagicalDungeonLevel(std::string name, int width, int height
     _name = name;
     _width = width;
     _height = height;
+    numberOfRooms = width * height;
+    rooms.resize(width * height);
 }
 
 std::string MagicalDungeonLevel::description(){
@@ -81,6 +86,8 @@ std::string MagicalDungeonLevel::description(){
     return name() + '\n' + "Size: " + w + " x " + h + '\n' + "Type: Dark Cave (Magical Dungeon)";
 
 }
+
+
 
 
 

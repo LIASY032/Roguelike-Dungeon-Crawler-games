@@ -11,7 +11,7 @@ std::vector<std::string>* Room::display(){
     std::string item = " ";
     std::string creature = "  ";
     if (_item){
-        item = (char) _item->displayCharacter();
+        item = 'L';
     }else{
          item = " ";
     }
@@ -53,57 +53,57 @@ std::vector<std::string>* Room::display(){
 
 
 Item* Room::item(){
-    return _item;
+    return _item.get();
 }
 
 void Room::setItem(Item &newItem){
-    _item = &newItem;
+    _item = std::unique_ptr<Item>(&newItem);
 }
 
 AbstractCreature* Room::creature(){
-    return _creature;
+    return _creature.get();
 }
 
 void Room::setCreature(AbstractCreature &newCreature){
-    _creature = &newCreature;
+    _creature = std::unique_ptr<AbstractCreature> (&newCreature);
 }
 
 void Room::setEastEdge(RoomEdge &edge){
-    eastEdge = &edge;
+    eastEdge = std::unique_ptr<RoomEdge> (&edge);
     eastEdge->setDirection(Direction::East);
 }
 
 void Room::setWestEdge(RoomEdge &edge){
-    westEdge = &edge;
+    westEdge = std::unique_ptr<RoomEdge> (&edge);
     westEdge->setDirection(Direction::West);
 }
 
 void Room::setNorthEdge(RoomEdge &edge){
-    northEdge = &edge;
+    northEdge = std::unique_ptr<RoomEdge> (&edge);
     northEdge->setDirection(Direction::North);
 }
 
 void Room::setSouthEdge(RoomEdge &edge){
-    southEdge = &edge;
+    southEdge = std::unique_ptr<RoomEdge> (&edge);
     southEdge->setDirection(Direction::South);
 }
 
 
 
 RoomEdge* Room::getNorthEdge(){
-    return northEdge;
+    return northEdge.get();
 }
 
 RoomEdge* Room::getSouthEdge(){
-    return southEdge;
+    return southEdge.get();
 }
 
 RoomEdge* Room::getWestEdge(){
-    return westEdge;
+    return westEdge.get();
 }
 
 RoomEdge* Room::getEastEdge(){
-    return eastEdge;
+    return eastEdge.get();
 }
 
 std::string Room::description(){
@@ -141,9 +141,25 @@ QuartzChamber::QuartzChamber(int id){
 AlchemistsLaboratory::AlchemistsLaboratory(int id){
     _id = id;
     _description = "An Alchemists Laboratory";
+    MagicWall eastWall;
+    MagicWall westWall;
+    MagicWall northWall;
+    MagicWall southWall;
+    setEastEdge(eastWall);
+    setWestEdge(westWall);
+    setNorthEdge(northWall);
+    setSouthEdge(southWall);
 }
 
 EnchantedLiboratory::EnchantedLiboratory(int id){
     _id = id;
     _description = "An Enchanted Liboratory";
+    MagicWall eastWall;
+    MagicWall westWall;
+    MagicWall northWall;
+    MagicWall southWall;
+    setEastEdge(eastWall);
+    setWestEdge(westWall);
+    setNorthEdge(northWall);
+    setSouthEdge(southWall);
 }

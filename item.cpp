@@ -4,10 +4,12 @@
 
 Item::Item(std::string name){
     _name = name;
+    _character = 'L';
 }
 
 Weapon::Weapon(std::string name){
 
+    _character = 'L';
     _name = name;
 }
 
@@ -21,11 +23,12 @@ std::string Item::name(){
 }
 
 char Item::displayCharacter(){
-    return 'L';
+    return _character;
 }
 
 Consumable::Consumable(std::string name){
 
+    _character = 'L';
     _name = name;
 }
 

@@ -10,8 +10,8 @@ public:
     DungeonLevel() = default;
     virtual ~DungeonLevel() = default;
     DungeonLevel(std::string name, int width, int height);
-    bool addRoom(Room room);
-    Room retrieveRoom(int number);
+    bool addRoom(Room &room);
+    Room* retrieveRoom(int number);
     int width();
     int height();
     int numberOfRooms = _width * _height;
@@ -21,12 +21,12 @@ public:
     int number();
 protected:
     std::string _name;
-    int _width;
-    int _height;
-    int _number;
-    std::vector<std::string> _display;
-    int index = 1;
-    std::vector<Room> rooms;
+    int _width = 0;
+    int _height = 0;
+    int _number = 0;
+    std::vector<std::string> _display{};
+    int index = 0;
+    std::vector<std::shared_ptr<Room>> rooms;
     std::string _description = "";
 
 };
