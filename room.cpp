@@ -141,25 +141,19 @@ QuartzChamber::QuartzChamber(int id){
 AlchemistsLaboratory::AlchemistsLaboratory(int id){
     _id = id;
     _description = "An Alchemists Laboratory";
-    MagicWall eastWall;
-    MagicWall westWall;
-    MagicWall northWall;
-    MagicWall southWall;
-    setEastEdge(eastWall);
-    setWestEdge(westWall);
-    setNorthEdge(northWall);
-    setSouthEdge(southWall);
+
+    setEastEdge(*new MagicWall());
+    setWestEdge(*new MagicWall());
+    setNorthEdge(*new MagicWall());
+    setSouthEdge(*new MagicWall());
 }
 
 EnchantedLiboratory::EnchantedLiboratory(int id){
     _id = id;
     _description = "An Enchanted Liboratory";
-    MagicWall eastWall;
-    MagicWall westWall;
-    MagicWall northWall;
-    MagicWall southWall;
-    setEastEdge(eastWall);
-    setWestEdge(westWall);
-    setNorthEdge(northWall);
-    setSouthEdge(southWall);
+
+    setEastEdge(*new MagicWall());
+    setWestEdge(*new MagicWall());
+    setNorthEdge(*new MagicWall());
+    setSouthEdge(*new MagicWall());
 }

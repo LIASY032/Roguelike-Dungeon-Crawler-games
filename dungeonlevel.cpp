@@ -37,7 +37,7 @@ std::vector<std::string>* DungeonLevel::display(){
     int count = 0;
 
     for (int i = 0; i < _height * 6; ++i){
-         _display.push_back("");
+        _display.push_back("");
         for (int column = 0; column < _width; ++column){
             input = input + rooms.at(column)->display()->at(i%6);
 
@@ -77,6 +77,11 @@ MagicalDungeonLevel::MagicalDungeonLevel(std::string name, int width, int height
     _width = width;
     _height = height;
     numberOfRooms = width * height;
+    std::unique_ptr<RoomEdge> eastWall (new MagicWall());
+    std::unique_ptr<RoomEdge> westWall (new MagicWall());
+    std::unique_ptr<RoomEdge> northWall (new MagicWall());
+    std::unique_ptr<RoomEdge> southWall (new MagicWall());
+
     rooms.resize(width * height);
 }
 

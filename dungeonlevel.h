@@ -26,7 +26,7 @@ protected:
     int _number = 0;
     std::vector<std::string> _display{};
     int index = 0;
-    std::vector<std::shared_ptr<Room>> rooms;
+    std::vector<std::unique_ptr<Room>> rooms;
     std::string _description = "";
 
 };
