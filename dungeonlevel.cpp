@@ -15,6 +15,11 @@ bool DungeonLevel::addRoom(Room &room){
     return true;
 }
 
+void DungeonLevel::initializeRoom(Room &room){
+    rooms.at(initializedIndex) = std::unique_ptr<Room> (&room) ;
+    ++initializedIndex;
+}
+
 Room* DungeonLevel::retrieveRoom(int number){
     return rooms.at(number).get();
 }
@@ -37,14 +42,16 @@ std::vector<std::string>* DungeonLevel::display(){
     int count = 0;
 
     for (int i = 0; i < _height * 6; ++i){
+        if (i%6 == 0 && i != 0){
+            count = count + _width;
+        }
+
         _display.push_back("");
         for (int column = 0; column < _width; ++column){
-            input = input + rooms.at(column)->display()->at(i%6);
+            input = input + rooms.at(count + column)->display()->at(i%6);
 
         }
-        if (i%6 == 0){
-            ++count;
-        }
+
         _display.at(i) = input;
         input = "";
     }
@@ -77,10 +84,6 @@ MagicalDungeonLevel::MagicalDungeonLevel(std::string name, int width, int height
     _width = width;
     _height = height;
     numberOfRooms = width * height;
-    std::unique_ptr<RoomEdge> eastWall (new MagicWall());
-    std::unique_ptr<RoomEdge> westWall (new MagicWall());
-    std::unique_ptr<RoomEdge> northWall (new MagicWall());
-    std::unique_ptr<RoomEdge> southWall (new MagicWall());
 
     rooms.resize(width * height);
 }

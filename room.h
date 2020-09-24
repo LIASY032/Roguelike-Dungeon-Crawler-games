@@ -25,12 +25,10 @@ public:
     void setEastEdge(RoomEdge &edge);
     void setWestEdge(RoomEdge &edge);
 
-
     RoomEdge* getNorthEdge();
     RoomEdge* getSouthEdge();
     RoomEdge* getEastEdge();
     RoomEdge* getWestEdge();
-
 
 
 protected:

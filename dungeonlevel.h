@@ -19,6 +19,7 @@ public:
     virtual std::string description() = 0;
     std::vector<std::string>* display();
     int number();
+    void initializeRoom(Room &room);
 protected:
     std::string _name;
     int _width = 0;
@@ -26,6 +27,7 @@ protected:
     int _number = 0;
     std::vector<std::string> _display{};
     int index = 0;
+    int initializedIndex = 0;
     std::vector<std::unique_ptr<Room>> rooms;
     std::string _description = "";
 

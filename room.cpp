@@ -113,9 +113,9 @@ std::string Room::description(){
                    westEdge->description() + '\n';
     if (_creature){
         if (_creature->getBoss()){
-            _description = _description + "There is a BOSS " + _creature->name() + "to fight\n";
+            _description = _description + "There is a BOSS " + _creature->name() + " to fight\n";
         }else{
-            _description = _description + "There is a " + _creature->name() + "to fight\n";
+            _description = _description + "There is a " + _creature->name() + " to fight\n";
         }
     }
     if (_item){
@@ -129,6 +129,10 @@ std::string Room::description(){
 RockChamber::RockChamber(int id){
     _id = id;
     _description = "A dark and empty chamber. (Rock Chamber)";
+    setEastEdge(*new RockWall());
+    setWestEdge(*new RockWall());
+    setNorthEdge(*new RockWall());
+    setSouthEdge(*new RockWall());
 }
 
 QuartzChamber::QuartzChamber(int id){
@@ -136,6 +140,10 @@ QuartzChamber::QuartzChamber(int id){
     _description = "A chamber that glitters like a "
                    "thousand stars in the torchlight. (Quartz Chamber)";
 
+    setEastEdge(*new RockWall());
+    setWestEdge(*new RockWall());
+    setNorthEdge(*new RockWall());
+    setSouthEdge(*new RockWall());
 }
 
 AlchemistsLaboratory::AlchemistsLaboratory(int id){

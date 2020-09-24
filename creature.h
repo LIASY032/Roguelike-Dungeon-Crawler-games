@@ -7,8 +7,10 @@ namespace creature{
     public:
         AbstractCreature() = default;
         AbstractCreature(std::string name);
+        AbstractCreature(std::string name, bool boss);
         virtual ~AbstractCreature() = default;
         virtual AbstractCreature* clone() = 0;
+        virtual AbstractCreature* clone(bool boss) = 0;
         virtual std::string name() = 0;
         char displayCharacter();
         bool getBoss();
@@ -23,7 +25,9 @@ namespace creature{
     public:
         Monster() = default;
         Monster(std::string name);
+        Monster(std::string name, bool boss);
         AbstractCreature* clone() override;
+        AbstractCreature * clone(bool boss) override;
         std::string name() override;
 
     };

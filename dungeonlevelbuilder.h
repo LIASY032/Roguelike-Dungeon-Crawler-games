@@ -21,12 +21,13 @@ public:
     virtual ~DungeonLevelBuilder() = default;
     virtual void buildDungeonLevel(std::string name, int width, int height) = 0;
     virtual Room* buildRoom(int id) = 0;
-    virtual void buildDoorway(Room &origin, Room &destination, Direction direction, DungeonLevelBuilder::MoveConstraints constraints) = 0;
+    void buildDoorway(Room &origin, Room &destination, Direction direction, DungeonLevelBuilder::MoveConstraints constraints);
     virtual void buildEntrance(Room &room, Direction direction) = 0;
     virtual void buildExit(Room &room, Direction direction) = 0;
     virtual void buildItem(Room &room) = 0;
     virtual void buildCreature(Room &room) = 0;
-    virtual void fillLevel() = 0;
+    void buildDoorwayHelper(Room &origin, Room &destination, Doorway &originEdge, Doorway &destinationEdge, Direction direction);
+
     DungeonLevel* getDungeonLevel();
     int generateRandomNumber(int number);
 protected:
@@ -53,12 +54,12 @@ public:
     MagicalDungeonLevelBuilder() = default;
     void buildDungeonLevel(std::string name, int width, int height) override;
     Room* buildRoom(int id) override;
-    void buildDoorway(Room &origin, Room &destination, Direction direction, DungeonLevelBuilder::MoveConstraints constraints) override;
+
     void buildEntrance(Room &room, Direction direction) override;
     void buildExit(Room &room, Direction direction) override;
     void buildItem(Room &room) override;
     void buildCreature(Room &room) override;
-    void fillLevel() override;
+
 };
 
 class BasicDungeonLevelBuilder: public DungeonLevelBuilder{
@@ -66,12 +67,12 @@ public:
     BasicDungeonLevelBuilder() = default;
     void buildDungeonLevel(std::string name, int width, int height) override;
     Room* buildRoom(int id) override;
-    void buildDoorway(Room &origin, Room &destination, Direction direction, DungeonLevelBuilder::MoveConstraints constraints) override;
+
     void buildEntrance(Room &room, Direction direction) override;
     void buildExit(Room &room, Direction direction) override;
     void buildItem(Room &room) override;
     void buildCreature(Room &room) override;
-    void fillLevel() override;
+
 };
 
 #endif // DUNGEONLEVELBUILDER_H

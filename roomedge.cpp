@@ -74,11 +74,11 @@ void OneWayDoor::setDirection(Direction _direction){
             _description = "an Exit (One-Way Door) to the dungeon level";
             break;
         case Direction::East:
-            character = 'I';
+            character = 'O';
             _description = "the entrance (One-Way Door) to the dungeon level";
             break;
         case Direction::West:
-            character = 'O';
+            character = 'I';
             _description = "an Exit (One-Way Door) to the dungeon level";
             break;
         }
