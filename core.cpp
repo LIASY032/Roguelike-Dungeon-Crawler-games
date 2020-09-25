@@ -11,7 +11,6 @@ Game* Game::instance(){
 void Game::setDungeonType(DungeonLevelBuilder &_levelBuilder){
     levelBuilder = std::shared_ptr<DungeonLevelBuilder> (&_levelBuilder);
     level = levelBuilder->getDungeonLevel();
-    std::cout << level->numberOfRooms << std::endl;
     double number = randomDouble();
     if (levelBuilder->generateRandomNumber(2) == 0){
         levelBuilder->buildEntrance(*level->retrieveRoom(0), Direction::North);
@@ -19,26 +18,38 @@ void Game::setDungeonType(DungeonLevelBuilder &_levelBuilder){
         levelBuilder->buildEntrance(*level->retrieveRoom(0), Direction::West);
     }
 
+    _levelBuilder.buildCreature(*level->retrieveRoom(0));
     if (levelBuilder->generateRandomNumber(2) == 0){
         levelBuilder->buildExit(*level->retrieveRoom(level->numberOfRooms - 1), Direction::East);
     }else{
         levelBuilder->buildExit(*level->retrieveRoom(level->numberOfRooms - 1), Direction::South);
     }
     int side = level->width() - 1;
-    for (int i = 0; i < level->numberOfRooms - 2; ++i){
-        if (i == side && i <=  level->numberOfRooms - level->width() - 1){
-            constraintHelper(*level->retrieveRoom(i), *level->retrieveRoom(i + level->width()), Direction::South, levelBuilder->generateRandomNumber(6));
-            side = level->width() +side;
-            std::cout << "if (i == side && i <=  level->numberOfRooms - level->width() - 1){" << std::endl;
+    for (int i = 0; i < level->numberOfRooms - 1; ++i){
+        int randnumber = levelBuilder->generateRandomNumber(6);
+        int otherrand = levelBuilder->generateRandomNumber(6);
 
-        }else if (i <= level->number() - 2 && i > level->numberOfRooms - level->width() - 1){
-            std::cout << "}else if (i <= level->number() - 2 && i > level->numberOfRooms - level->width() - 1){" << std::endl;
-            constraintHelper(*level->retrieveRoom(i), *level->retrieveRoom(i + 1), Direction::East, levelBuilder->generateRandomNumber(6));
+        number = randomDouble();
+        if (i < (level->numberOfRooms - level->width())){
+            if (i == side){
+                constraintHelper(*level->retrieveRoom(i), *level->retrieveRoom(i + level->width()), Direction::South, randnumber);
+                side = level->width() +side;
+
+            }else{
+                constraintHelper(*level->retrieveRoom(i), *level->retrieveRoom(i + level->width()), Direction::South, randnumber);
+                constraintHelper(*level->retrieveRoom(i), *level->retrieveRoom(i + 1), Direction::East, otherrand);
+
+            }
         }else{
-            constraintHelper(*level->retrieveRoom(i), *level->retrieveRoom(i + level->width()), Direction::South, levelBuilder->generateRandomNumber(6));
-            constraintHelper(*level->retrieveRoom(i), *level->retrieveRoom(i + 1), Direction::East, levelBuilder->generateRandomNumber(6));
+            constraintHelper(*level->retrieveRoom(i), *level->retrieveRoom(i + 1), Direction::East, randnumber);
+
         }
-//        if (i > 0 && i < )
+
+
+    }
+
+    for (int i = 0; i < level->numberOfRooms; ++i){
+        std::cout << i << " " << level->retrieveRoom(i)->description() << std::endl;
     }
 
 

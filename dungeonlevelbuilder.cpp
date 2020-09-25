@@ -11,8 +11,25 @@ int DungeonLevelBuilder::generateRandomNumber(int number){
     return rand()%number;
 }
 
+Direction DungeonLevelBuilder::reverseDirection(Direction direction){
+    switch (direction) {
+    case Direction::North:
+        return Direction::South;
+        break;
+    case Direction::East:
+        return Direction::West;
+        break;
+    case Direction::West:
+        return Direction::East;
+        break;
+    case Direction::South:
+        return Direction::North;
+    }
+
+}
 void DungeonLevelBuilder::buildDoorwayHelper(Room &origin, Room &destination, Doorway &originEdge, Doorway &destinationEdge, Direction direction){
 
+    originEdge.connect(destinationEdge);
     switch (direction) {
     case Direction::North:
         origin.setNorthEdge(originEdge);
@@ -84,23 +101,23 @@ void DungeonLevelBuilder::buildDoorway(Room &origin, Room &destination, Directio
         break;
     case DungeonLevelBuilder::MoveConstraints::DestinationImpassable:
         if (block == 0){
-            buildDoorwayHelper(destination, origin, *new BlockedDoorway(), *new BlockedDoorway(), direction);
+            buildDoorwayHelper(destination, origin, *new BlockedDoorway(), *new BlockedDoorway(), reverseDirection(direction));
         }else{
             if (number == 0){
-                buildDoorwayHelper(destination, origin, *new OneWayDoor(), *new LockedDoor(), direction);
+                buildDoorwayHelper(destination, origin, *new OneWayDoor(), *new LockedDoor(), reverseDirection(direction));
             }else{
-                buildDoorwayHelper(destination, origin, *new OneWayDoor(), *new OpenDoorway(),direction);
+                buildDoorwayHelper(destination, origin, *new OneWayDoor(), *new OpenDoorway(),reverseDirection(direction));
             }
         }
 
         break;
     case DungeonLevelBuilder::MoveConstraints::OriginLocked:
         if (lock == 0){
-            buildDoorwayHelper(destination, origin, *new LockedDoor(),*new OpenDoorway(), direction);
+            buildDoorwayHelper(destination, origin, *new LockedDoor(),*new OpenDoorway(), reverseDirection(direction));
         }else if (lock == 1){
-            buildDoorwayHelper(destination, origin,*new LockedDoor(), *new OneWayDoor(),direction);
+            buildDoorwayHelper(destination, origin,*new LockedDoor(), *new OneWayDoor(),reverseDirection(direction));
         }else{
-            buildDoorwayHelper(destination, origin,*new LockedDoor(), *new LockedDoor(),direction);
+            buildDoorwayHelper(destination, origin,*new LockedDoor(), *new LockedDoor(),reverseDirection(direction));
         }
 
         break;

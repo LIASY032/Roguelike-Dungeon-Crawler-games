@@ -31,6 +31,7 @@ public:
     DungeonLevel* getDungeonLevel();
     int generateRandomNumber(int number);
 protected:
+    Direction reverseDirection(Direction direction);
 
     std::unique_ptr<DungeonLevel> level = 0;
     Consumable hpotion{"Health Potion"};
