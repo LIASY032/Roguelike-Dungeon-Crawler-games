@@ -1,61 +1,6 @@
-//#include "roomedge.h"
+//#include "common.h"
 
-
-
-////RoomEdge
-//bool RoomEdge::isPassage(){
-//    return pass;
-//}
-
-//char RoomEdge::displayCharacter(){
-//    return character;
-//}
-
-
-//Direction RoomEdge::getDirection(){
-//    return direction;
-//}
-
-//std::string RoomEdge::description(){
-//    std::string output = "";
-//    switch (direction) {
-//    case Direction::East:
-//        output = "EAST ";
-//        break;
-//    case Direction::West:
-//        output = "West ";
-//        break;
-//    case Direction::North:
-//        output = "North ";
-//        break;
-//    default:
-//        output = "South ";
-
-
-//    }
-//    return "To the " + output + "is the " + _description;
-//}
-
-////Doorway
-
-//void Doorway::connect(Doorway &opposite){
-//    isConnected = true;
-//    _doorway = &opposite;
-//}
-
-//bool Doorway::isEntrance(){
-//    return entrance;
-//}
-
-//bool Doorway::isExit(){
-//    return exit;
-//}
-
-//int Doorway::type(){
-//    return doorwayType;
-//}
-
-
+//using namespace core::dungeon::common;
 
 //OneWayDoor::OneWayDoor(){
 //    doorwayType = 2;
@@ -63,6 +8,7 @@
 
 //void OneWayDoor::setDirection(Direction _direction){
 //    direction = _direction;
+//    //if the doorway address is equal to 0, the direction of this is entrance or exit
 //    if (!_doorway){
 //        switch (direction) {
 //        case Direction::North:
@@ -83,6 +29,8 @@
 //            break;
 //        }
 //    }else{
+
+
 //        _description = "One-Way Door to another chamber";
 //        isConnected = true;
 //        switch (direction) {
@@ -107,7 +55,11 @@
 //}
 //void OneWayDoor::connect(Doorway &opposite){
 //    pass = true;
+
+//    //check the opposite doorway is open or loecked
 //    if (opposite.type() == 1){
+
+//        //this is open doorway
 //        _description = "One-Way Door to another chamber";
 //        isConnected = true;
 //        _doorway = &opposite;
@@ -120,6 +72,7 @@
 //        character = opposite.displayCharacter();
 
 //    }else{
+//        //this is loecked doorway
 //        _description = "One-Way Door to another chamber";
 //        isConnected = true;
 //        switch (direction) {
@@ -189,12 +142,13 @@
 //}
 
 //void BlockedDoorway::connect(Doorway &opposite){
-//        if (opposite.type() == 3){
-//            isConnected = true;
-//            _doorway = &opposite;
+//    //the opposite is always  blocked doorway
+//    if (opposite.type() == 3){
+//        isConnected = true;
+//        _doorway = &opposite;
 
-//        }
-//        pass =true;
+//    }
+//    pass =true;
 //}
 
 //LockedDoor::LockedDoor(){
@@ -219,35 +173,10 @@
 //        exit = true;
 //    }
 //}
+
 //void LockedDoor::connect(Doorway &opposite){
 //    isConnected = true;
 //    _doorway = &opposite;
 
 //}
 
-
-//Wall::Wall(){
-
-//}
-
-//void Wall::setDirection(Direction _direction){
-//    direction = _direction;
-//    if (direction == Direction::North || direction == Direction::South){
-//        character = '-';
-//    }else{
-//        character = '|';
-//    }
-//}
-
-
-
-
-//RockWall::RockWall(){
-//    _description = "Rock Wall.";
-//}
-
-
-
-//MagicWall::MagicWall(){
-//    _description = "Magic Wall.";
-//}

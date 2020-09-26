@@ -1,316 +1,318 @@
-#include "dungeonlevelbuilder.h"
+//#include "dungeonlevelbuilder.h"
 
 
-DungeonLevel* DungeonLevelBuilder::getDungeonLevel(){
+//DungeonLevel* DungeonLevelBuilder::getDungeonLevel(){
 
-    return level.get();
-}
+//    return level.get();
+//}
 
-int DungeonLevelBuilder::generateRandomNumber(int number){
-    srand(time(0));
-    return rand()%number;
-}
+//int DungeonLevelBuilder::generateRandomNumber(int number){
+//    srand(time(0));
+//    return rand()%number;
+//}
 
-Direction DungeonLevelBuilder::reverseDirection(Direction direction){
-    switch (direction) {
-    case Direction::North:
-        return Direction::South;
-        break;
-    case Direction::East:
-        return Direction::West;
-        break;
-    case Direction::West:
-        return Direction::East;
-        break;
-    case Direction::South:
-        return Direction::North;
-    }
+//Direction DungeonLevelBuilder::reverseDirection(Direction direction){
+//    switch (direction) {
+//    case Direction::North:
+//        return Direction::South;
+//        break;
+//    case Direction::East:
+//        return Direction::West;
+//        break;
+//    case Direction::West:
+//        return Direction::East;
+//        break;
+//    case Direction::South:
+//        return Direction::North;
+//    }
 
-}
-void DungeonLevelBuilder::buildDoorwayHelper(Room &origin, Room &destination, Doorway &originEdge, Doorway &destinationEdge, Direction direction){
-
-    originEdge.connect(destinationEdge);
-    switch (direction) {
-    case Direction::North:
-        origin.setNorthEdge(originEdge);
-        destination.setSouthEdge(destinationEdge);
-        break;
-    case Direction::East:
-        origin.setEastEdge(originEdge);
-        destination.setWestEdge(destinationEdge);
-        break;
-    case Direction::West:
-        origin.setWestEdge(originEdge);
-        destination.setEastEdge(destinationEdge);
-        break;
-    default:
-        origin.setSouthEdge(originEdge);
-        destination.setNorthEdge(destinationEdge);
-    }
-    originEdge.connect(destinationEdge);
-}
-
-void MagicalDungeonLevelBuilder::buildDungeonLevel(std::string name, int width, int height){
+//}
+//void DungeonLevelBuilder::buildDoorwayHelper(Room &origin, Room &destination, Doorway &originEdge, Doorway &destinationEdge, Direction direction){
 
 
-    level = std::unique_ptr<DungeonLevel> (new MagicalDungeonLevel{name, width, height});
+//    switch (direction) {
+//    case Direction::North:
+//        origin.setNorthEdge(originEdge);
+//        destination.setSouthEdge(destinationEdge);
+//        break;
+//    case Direction::East:
+//        origin.setEastEdge(originEdge);
+//        destination.setWestEdge(destinationEdge);
+//        break;
+//    case Direction::West:
+//        origin.setWestEdge(originEdge);
+//        destination.setEastEdge(destinationEdge);
+//        break;
+//    default:
+//        origin.setSouthEdge(originEdge);
+//        destination.setNorthEdge(destinationEdge);
+//    }
+//    destinationEdge.connect(originEdge);
+//    originEdge.connect(destinationEdge);
 
-    for (int i = 0; i < level->numberOfRooms; ++i){
+//}
 
-        level->initializeRoom(*buildRoom(i));
-    }
-
-}
-
-
-
-Room* MagicalDungeonLevelBuilder::buildRoom(int id){
-    int number = generateRandomNumber(2);
-    if (number == 0){
-        return new EnchantedLiboratory(id);
-
-    }else{
-
-        return new AlchemistsLaboratory(id);
-    }
-
-}
-
-void DungeonLevelBuilder::buildDoorway(Room &origin, Room &destination, Direction direction, DungeonLevelBuilder::MoveConstraints constraints){
-    int number = generateRandomNumber(2);
-    int block = generateRandomNumber(2);
-    int lock = generateRandomNumber(3);
+//void MagicalDungeonLevelBuilder::buildDungeonLevel(std::string name, int width, int height){
 
 
-    switch (constraints) {
-    case DungeonLevelBuilder::MoveConstraints::None:
-        buildDoorwayHelper(origin, destination, *new OpenDoorway(), *new OpenDoorway(), direction);
-        break;
-    case DungeonLevelBuilder::MoveConstraints::OriginImpassable:
+//    level = std::unique_ptr<DungeonLevel> (new MagicalDungeonLevel{name, width, height});
 
-        if (block == 0){
-            buildDoorwayHelper(origin, destination, *new BlockedDoorway(), *new BlockedDoorway(), direction);
-        }else{
-            if (number == 0){
-                buildDoorwayHelper(origin, destination, *new OneWayDoor(), *new LockedDoor, direction);
-            }else{
-                buildDoorwayHelper(origin, destination, *new OneWayDoor(), *new OpenDoorway,direction);
-            }
-        }
+//    for (int i = 0; i < level->numberOfRooms; ++i){
 
-        break;
-    case DungeonLevelBuilder::MoveConstraints::DestinationImpassable:
-        if (block == 0){
-            buildDoorwayHelper(destination, origin, *new BlockedDoorway(), *new BlockedDoorway(), reverseDirection(direction));
-        }else{
-            if (number == 0){
-                buildDoorwayHelper(destination, origin, *new OneWayDoor(), *new LockedDoor(), reverseDirection(direction));
-            }else{
-                buildDoorwayHelper(destination, origin, *new OneWayDoor(), *new OpenDoorway(),reverseDirection(direction));
-            }
-        }
+//        level->initializeRoom(*buildRoom(i));
+//    }
 
-        break;
-    case DungeonLevelBuilder::MoveConstraints::OriginLocked:
-        if (lock == 0){
-            buildDoorwayHelper(destination, origin, *new LockedDoor(),*new OpenDoorway(), reverseDirection(direction));
-        }else if (lock == 1){
-            buildDoorwayHelper(destination, origin,*new LockedDoor(), *new OneWayDoor(),reverseDirection(direction));
-        }else{
-            buildDoorwayHelper(destination, origin,*new LockedDoor(), *new LockedDoor(),reverseDirection(direction));
-        }
-
-        break;
-    default:
-        if (lock == 0){
-            buildDoorwayHelper(origin, destination, *new LockedDoor(),*new OpenDoorway(), direction);
-        }else if (lock == 1){
-            buildDoorwayHelper(origin, destination,*new LockedDoor(), *new OneWayDoor(),direction);
-        }else{
-            buildDoorwayHelper(origin, destination,*new LockedDoor(), *new LockedDoor(),direction);
-        }
-    }
-
-}
+//}
 
 
 
-void MagicalDungeonLevelBuilder::buildEntrance(Room &room, Direction direction){
+//Room* MagicalDungeonLevelBuilder::buildRoom(int id){
+//    int number = generateRandomNumber(2);
+//    if (number == 0){
+//        return new EnchantedLiboratory(id);
 
-    switch (direction) {
-    case Direction::North:
+//    }else{
 
-        room.setNorthEdge(*new OneWayDoor());
-        break;
-    default:
-        room.setWestEdge(*new OneWayDoor());
-    }
-}
+//        return new AlchemistsLaboratory(id);
+//    }
 
-void MagicalDungeonLevelBuilder::buildExit(Room &room, Direction direction){
-    switch (direction) {
-    case Direction::South:
+//}
 
-        room.setSouthEdge(*new OneWayDoor());
-
-        break;
-    default:
-        room.setEastEdge(*new OneWayDoor());
-
-    }
-    int number = generateRandomNumber(6);
-    if (number == 0){
-        room.setItem(*hpotion.clone());
-    }else if (number == 1){
-        room.setItem(*cocktail.clone());
-    }else if (number == 2){
-        room.setItem(*rpotion.clone());
-    }else if (number == 3){
-        room.setItem(*boomerang.clone());
-    }else if (number == 4){
-        room.setItem(*staff.clone());
-    }else{
-        room.setItem(*wand.clone());
-    }
-
-    int othernumber = generateRandomNumber(3);
-    if (othernumber == 0){
-        room.setCreature(*goblin.clone(true));
-    }else if (othernumber == 1){
-        room.setCreature(*wizard.clone(true));
-    }else{
-        room.setCreature(*dragon.clone(true));
-    }
+//void DungeonLevelBuilder::buildDoorway(Room &origin, Room &destination, Direction direction, DungeonLevelBuilder::MoveConstraints constraints){
+//    int number = generateRandomNumber(2);
+//    int block = generateRandomNumber(2);
+//    int lock = generateRandomNumber(3);
 
 
-}
+//    switch (constraints) {
+//    case DungeonLevelBuilder::MoveConstraints::None:
+//        buildDoorwayHelper(origin, destination, *new OpenDoorway(), *new OpenDoorway(), direction);
+//        break;
+//    case DungeonLevelBuilder::MoveConstraints::OriginImpassable:
 
-void MagicalDungeonLevelBuilder::buildItem(Room &room){
-    int number = generateRandomNumber(6);
+//        if (block == 0){
+//            buildDoorwayHelper(origin, destination, *new BlockedDoorway(), *new BlockedDoorway(), direction);
+//        }else{
+//            if (number == 0){
+//                buildDoorwayHelper(origin, destination, *new OneWayDoor(), *new LockedDoor, direction);
+//            }else{
+//                buildDoorwayHelper(origin, destination, *new OneWayDoor(), *new OpenDoorway,direction);
+//            }
+//        }
 
-    if (number == 0){
-        room.setItem(*hpotion.clone());
-    }else if (number == 1){
-        room.setItem(*cocktail.clone());
-    }else if (number == 2){
-        room.setItem(*rpotion.clone());
-    }else if (number == 3){
-        room.setItem(*boomerang.clone());
-    }else if (number == 4){
-        room.setItem(*staff.clone());
-    }else{
-        room.setItem(*wand.clone());
-    }
-}
+//        break;
+//    case DungeonLevelBuilder::MoveConstraints::DestinationImpassable:
+//        if (block == 0){
+//            buildDoorwayHelper(destination, origin, *new BlockedDoorway(), *new BlockedDoorway(), reverseDirection(direction));
+//        }else{
+//            if (number == 0){
+//                buildDoorwayHelper(destination, origin, *new OneWayDoor(), *new LockedDoor(), reverseDirection(direction));
+//            }else{
+//                buildDoorwayHelper(destination, origin, *new OneWayDoor(), *new OpenDoorway(),reverseDirection(direction));
+//            }
+//        }
 
-void MagicalDungeonLevelBuilder::buildCreature(Room &room){
-    int number = generateRandomNumber(3);
+//        break;
+//    case DungeonLevelBuilder::MoveConstraints::OriginLocked:
+//        if (lock == 0){
+//            buildDoorwayHelper(destination, origin, *new LockedDoor(),*new OpenDoorway(), reverseDirection(direction));
+//        }else if (lock == 1){
+//            buildDoorwayHelper(destination, origin,*new LockedDoor(), *new OneWayDoor(),reverseDirection(direction));
+//        }else{
+//            buildDoorwayHelper(destination, origin,*new LockedDoor(), *new LockedDoor(),reverseDirection(direction));
+//        }
 
-    if (number == 0){
-        room.setCreature(*goblin.clone());
-    }else if (number == 1){
-        room.setCreature(*wizard.clone());
-    }else{
-        room.setCreature(*dragon.clone());
-    }
-}
+//        break;
+//    default:
+//        if (lock == 0){
+//            buildDoorwayHelper(origin, destination, *new LockedDoor(),*new OpenDoorway(), direction);
+//        }else if (lock == 1){
+//            buildDoorwayHelper(origin, destination,*new LockedDoor(), *new OneWayDoor(),direction);
+//        }else{
+//            buildDoorwayHelper(origin, destination,*new LockedDoor(), *new LockedDoor(),direction);
+//        }
+//    }
 
-void BasicDungeonLevelBuilder::buildDungeonLevel(std::string name, int width, int height){
-
-    level = std::unique_ptr<DungeonLevel> (new BasicDungeonLevel{name, width, height});
-    for (int i = 0; i < level->numberOfRooms; ++i){
-
-        level->initializeRoom(*buildRoom(i));
-    }
-}
+//}
 
 
 
-Room* BasicDungeonLevelBuilder::buildRoom(int id){
-    int number = generateRandomNumber(2);
-    if (number == 0){
-        return new RockChamber(id);
+//void MagicalDungeonLevelBuilder::buildEntrance(Room &room, Direction direction){
 
-    }else{
+//    switch (direction) {
+//    case Direction::North:
 
-        return new QuartzChamber(id);
-    }
-}
+//        room.setNorthEdge(*new OneWayDoor());
+//        break;
+//    default:
+//        room.setWestEdge(*new OneWayDoor());
+//    }
+//}
+
+//void MagicalDungeonLevelBuilder::buildExit(Room &room, Direction direction){
+//    switch (direction) {
+//    case Direction::South:
+
+//        room.setSouthEdge(*new OneWayDoor());
+
+//        break;
+//    default:
+//        room.setEastEdge(*new OneWayDoor());
+
+//    }
+//    int number = generateRandomNumber(6);
+//    if (number == 0){
+//        room.setItem(*hpotion.clone());
+//    }else if (number == 1){
+//        room.setItem(*cocktail.clone());
+//    }else if (number == 2){
+//        room.setItem(*rpotion.clone());
+//    }else if (number == 3){
+//        room.setItem(*boomerang.clone());
+//    }else if (number == 4){
+//        room.setItem(*staff.clone());
+//    }else{
+//        room.setItem(*wand.clone());
+//    }
+
+//    int othernumber = generateRandomNumber(3);
+//    if (othernumber == 0){
+//        room.setCreature(*goblin.clone(true));
+//    }else if (othernumber == 1){
+//        room.setCreature(*wizard.clone(true));
+//    }else{
+//        room.setCreature(*dragon.clone(true));
+//    }
+
+
+//}
+
+//void MagicalDungeonLevelBuilder::buildItem(Room &room){
+//    int number = generateRandomNumber(6);
+
+//    if (number == 0){
+//        room.setItem(*hpotion.clone());
+//    }else if (number == 1){
+//        room.setItem(*cocktail.clone());
+//    }else if (number == 2){
+//        room.setItem(*rpotion.clone());
+//    }else if (number == 3){
+//        room.setItem(*boomerang.clone());
+//    }else if (number == 4){
+//        room.setItem(*staff.clone());
+//    }else{
+//        room.setItem(*wand.clone());
+//    }
+//}
+
+//void MagicalDungeonLevelBuilder::buildCreature(Room &room){
+//    int number = generateRandomNumber(3);
+
+//    if (number == 0){
+//        room.setCreature(*goblin.clone());
+//    }else if (number == 1){
+//        room.setCreature(*wizard.clone());
+//    }else{
+//        room.setCreature(*dragon.clone());
+//    }
+//}
+
+//void BasicDungeonLevelBuilder::buildDungeonLevel(std::string name, int width, int height){
+
+//    level = std::unique_ptr<DungeonLevel> (new BasicDungeonLevel{name, width, height});
+//    for (int i = 0; i < level->numberOfRooms; ++i){
+
+//        level->initializeRoom(*buildRoom(i));
+//    }
+//}
 
 
 
-void BasicDungeonLevelBuilder::buildEntrance(Room &room, Direction direction){
-    switch (direction) {
-    case Direction::North:
+//Room* BasicDungeonLevelBuilder::buildRoom(int id){
+//    int number = generateRandomNumber(2);
+//    if (number == 0){
+//        return new RockChamber(id);
 
-        room.setNorthEdge(*new OneWayDoor());
-        break;
-    default:
-        room.setWestEdge(*new OneWayDoor());
-    }
-}
+//    }else{
 
-void BasicDungeonLevelBuilder::buildExit(Room &room, Direction direction){
-    switch (direction) {
-    case Direction::South:
+//        return new QuartzChamber(id);
+//    }
+//}
 
-        room.setSouthEdge(*new OneWayDoor());
 
-        break;
-    default:
-        room.setEastEdge(*new OneWayDoor());
 
-    }
-    int number = generateRandomNumber(6);
-    if (number == 0){
-        room.setItem(*hpotion.clone());
-    }else if (number == 1){
-        room.setItem(*cocktail.clone());
-    }else if (number == 2){
-        room.setItem(*bomb.clone());
-    }else if (number == 3){
-        room.setItem(*boomerang.clone());
-    }else if (number == 4){
-        room.setItem(*sword.clone());
-    }else{
-        room.setItem(*axe.clone());
-    }
+//void BasicDungeonLevelBuilder::buildEntrance(Room &room, Direction direction){
+//    switch (direction) {
+//    case Direction::North:
 
-    int othernumber = generateRandomNumber(3);
-    if (othernumber == 0){
-        room.setCreature(*goblin.clone(true));
-    }else if (othernumber == 1){
-        room.setCreature(*wizard.clone(true));
-    }else{
-        room.setCreature(*werewolf.clone(true));
-    }
-}
+//        room.setNorthEdge(*new OneWayDoor());
+//        break;
+//    default:
+//        room.setWestEdge(*new OneWayDoor());
+//    }
+//}
 
-void BasicDungeonLevelBuilder::buildItem(Room &room){
-    int number = generateRandomNumber(6);
-    if (number == 0){
-        room.setItem(*hpotion.clone());
-    }else if (number == 1){
-        room.setItem(*cocktail.clone());
-    }else if (number == 2){
-        room.setItem(*bomb.clone());
-    }else if (number == 3){
-        room.setItem(*boomerang.clone());
-    }else if (number == 4){
-        room.setItem(*sword.clone());
-    }else{
-        room.setItem(*axe.clone());
-    }
+//void BasicDungeonLevelBuilder::buildExit(Room &room, Direction direction){
+//    switch (direction) {
+//    case Direction::South:
 
-}
+//        room.setSouthEdge(*new OneWayDoor());
 
-void BasicDungeonLevelBuilder::buildCreature(Room &room){
-    int othernumber = generateRandomNumber(3);
-    if (othernumber == 0){
-        room.setCreature(*goblin.clone());
-    }else if (othernumber == 1){
-        room.setCreature(*wizard.clone());
-    }else{
-        room.setCreature(*werewolf.clone());
-    }
-}
+//        break;
+//    default:
+//        room.setEastEdge(*new OneWayDoor());
+
+//    }
+//    int number = generateRandomNumber(6);
+//    if (number == 0){
+//        room.setItem(*hpotion.clone());
+//    }else if (number == 1){
+//        room.setItem(*cocktail.clone());
+//    }else if (number == 2){
+//        room.setItem(*bomb.clone());
+//    }else if (number == 3){
+//        room.setItem(*boomerang.clone());
+//    }else if (number == 4){
+//        room.setItem(*sword.clone());
+//    }else{
+//        room.setItem(*axe.clone());
+//    }
+
+//    int othernumber = generateRandomNumber(3);
+//    if (othernumber == 0){
+//        room.setCreature(*goblin.clone(true));
+//    }else if (othernumber == 1){
+//        room.setCreature(*wizard.clone(true));
+//    }else{
+//        room.setCreature(*werewolf.clone(true));
+//    }
+//}
+
+//void BasicDungeonLevelBuilder::buildItem(Room &room){
+//    int number = generateRandomNumber(6);
+//    if (number == 0){
+//        room.setItem(*hpotion.clone());
+//    }else if (number == 1){
+//        room.setItem(*cocktail.clone());
+//    }else if (number == 2){
+//        room.setItem(*bomb.clone());
+//    }else if (number == 3){
+//        room.setItem(*boomerang.clone());
+//    }else if (number == 4){
+//        room.setItem(*sword.clone());
+//    }else{
+//        room.setItem(*axe.clone());
+//    }
+
+//}
+
+//void BasicDungeonLevelBuilder::buildCreature(Room &room){
+//    int othernumber = generateRandomNumber(3);
+//    if (othernumber == 0){
+//        room.setCreature(*goblin.clone());
+//    }else if (othernumber == 1){
+//        room.setCreature(*wizard.clone());
+//    }else{
+//        room.setCreature(*werewolf.clone());
+//    }
+//}
