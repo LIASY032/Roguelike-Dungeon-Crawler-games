@@ -1,14 +1,11 @@
 #ifndef DUNGEON_H
 #define DUNGEON_H
-#include "item.h"
-#include "creature.h"
+
 #include <iostream>
 #include <vector>
-#include "basic.h"
-#include "common.h"
-#include "magical.h"
-#include<stdio.h>
-#include<ctype.h>
+
+#include <stdio.h>
+#include <ctype.h>
 #include <random>
 #include <ctime>
 
@@ -420,10 +417,19 @@ protected:
 class DungeonLevelBuilder{
 public:
     enum class MoveConstraints: unsigned{
+        //both are open doorway
         None = 0,
+
+        //the origin doorway is onewaydoor or both side are blocked door
         OriginImpassable = 1,
+
+        //the destination doorway is onewaydoor or both side are blocked door
         DestinationImpassable = 2,
+
+        //the origin doorway is locked door
         OriginLocked = 4,
+
+        //the destination doorway is locked door
         Destinationlocked = 8
     };
     DungeonLevelBuilder() = default;
@@ -436,7 +442,21 @@ public:
      * @param height
      */
     virtual void buildDungeonLevel(std::string name, int width, int height) = 0;
+
+    /**
+     * @brief buildRoom builds a room according to the id
+     * @param id
+     * @return Room
+     */
     virtual Room* buildRoom(int id) = 0;
+
+    /**
+     * @brief buildDoorway connect the origin doorway and destination doorway according te direction and constraits
+     * @param origin
+     * @param destination
+     * @param direction
+     * @param constraints set the doorway type
+     */
     void buildDoorway(Room &origin, Room &destination, Direction direction, DungeonLevelBuilder::MoveConstraints constraints);
     virtual void buildEntrance(Room &room, Direction direction) = 0;
     virtual void buildExit(Room &room, Direction direction) = 0;

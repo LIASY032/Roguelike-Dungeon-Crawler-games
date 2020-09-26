@@ -20,8 +20,6 @@ SOURCES += \
         core.cpp \
         creature.cpp \
         dungeon.cpp \
-        dungeonlevel.cpp \
-        dungeonlevelbuilder.cpp \
         item.cpp \
         magical.cpp \
         main.cpp \
@@ -45,3 +43,6 @@ HEADERS += \
     magical.h \
     room.h \
     roomedge.h
+
+DISTFILES += \
+    Makefile

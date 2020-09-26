@@ -46,11 +46,11 @@ void core::Game::createExampleLevel(){
     level = levelBuilder->getDungeonLevel();
     levelBuilder->buildEntrance(*level->retrieveRoom(0), Direction::North);
     levelBuilder->buildExit(*level->retrieveRoom((level->width() * level->height()) - 1), Direction::East);
-    levelBuilder->buildDoorway(*level->retrieveRoom(0), *level->retrieveRoom(2), Direction::South, DungeonLevelBuilder::MoveConstraints::None);
+    levelBuilder->buildDoorway(*level->retrieveRoom(0), *level->retrieveRoom(2), Direction::South, DungeonLevelBuilder::MoveConstraints::DestinationImpassable);
 
-    levelBuilder->buildDoorway(*level->retrieveRoom(2), *level->retrieveRoom(3), Direction::East, DungeonLevelBuilder::MoveConstraints::OriginLocked);
+    levelBuilder->buildDoorway(*level->retrieveRoom(2), *level->retrieveRoom(3), Direction::East, DungeonLevelBuilder::MoveConstraints::DestinationImpassable);
     levelBuilder->buildDoorway(*level->retrieveRoom(0), *level->retrieveRoom(1), Direction::East, DungeonLevelBuilder::MoveConstraints::None);
-    levelBuilder->buildDoorway(*level->retrieveRoom(1), *level->retrieveRoom(3), Direction::South, DungeonLevelBuilder::MoveConstraints::OriginImpassable);
+    levelBuilder->buildDoorway(*level->retrieveRoom(1), *level->retrieveRoom(3), Direction::South, DungeonLevelBuilder::MoveConstraints::None);
 }
 
 void Game::createRandomLevel(std::string name, int witch, int height){
@@ -83,6 +83,7 @@ void Game::createRandomLevel(std::string name, int witch, int height){
      */
     int side = level->width() - 1;
 
+    bool leftdowncorner = true;
     //according above the diagram to modify the room
     for (int i = 0; i < level->numberOfRooms - 1; ++i){
         int randnumber = randomDouble();
@@ -91,31 +92,64 @@ void Game::createRandomLevel(std::string name, int witch, int height){
         double randomitem = randomDouble();
         double randomMonster = randomDouble();
         number = randomDouble();
+
+
         if (i < (level->numberOfRooms - level->width())){
             //modify 2's room south
             if (i == side){
-                if (buildornot > 2.5){
+                //if this room's west edge is passage
+                if (level->retrieveRoom(i)->getWestEdge()->isPassage()){
+                    if (buildornot > 2.5){
+                        constraintHelper(*level->retrieveRoom(i), *level->retrieveRoom(i + level->width()), Direction::South, randnumber);
+                    }
+                }else{
                     constraintHelper(*level->retrieveRoom(i), *level->retrieveRoom(i + level->width()), Direction::South, randnumber);
                 }
                 side = level->width() +side;
 
             }else{//modify 1's room east edge or south edge
+                //if the room's north and west is not passage
+
                 if (buildornot >= 2 && buildornot < 4){
                     constraintHelper(*level->retrieveRoom(i), *level->retrieveRoom(i + level->width()), Direction::South, randnumber);
                     constraintHelper(*level->retrieveRoom(i), *level->retrieveRoom(i + 1), Direction::East, otherrand);
                 }else if (buildornot < 5 && buildornot >= 4) {
                     constraintHelper(*level->retrieveRoom(i), *level->retrieveRoom(i + level->width()), Direction::South, randnumber);
                 }else{
-                    if (randomDouble() > 2.5){
-                        constraintHelper(*level->retrieveRoom(i), *level->retrieveRoom(i + 1), Direction::East, otherrand);
-                    }
+                    constraintHelper(*level->retrieveRoom(i), *level->retrieveRoom(i + 1), Direction::East, otherrand);
+
                 }
             }
         }else{//modify 3's room east edge
-            if (buildornot > 2.5){
-                constraintHelper(*level->retrieveRoom(i), *level->retrieveRoom(i + 1), Direction::East, randnumber);
+
+            if (leftdowncorner){
+                if (buildornot > 2.5){
+                    constraintHelper(*level->retrieveRoom(i), *level->retrieveRoom(i + 1), Direction::East, randnumber);
+                }
+                //if the left down corner's north is not passage, next room's north is not passage, and the east is not passage
+                if (!level->retrieveRoom(i)->getNorthEdge()->isPassage() && !level->retrieveRoom(i + 1)->getNorthEdge()->isPassage() && !level->retrieveRoom(i)->getEastEdge()->isPassage()){
+                    constraintHelper(*level->retrieveRoom(i), *level->retrieveRoom(i + 1), Direction::East, randnumber);
+                    constraintHelper(*level->retrieveRoom(i - level->width()), *level->retrieveRoom(i ), Direction::South, randnumber);
+                }
+
+                if (!level->retrieveRoom(i + 1)->getWestEdge()->isPassage() && level->retrieveRoom(i + 1)->getNorthEdge()->isPassage() && !level->retrieveRoom(i)->getNorthEdge()->isPassage()){
+                    constraintHelper(*level->retrieveRoom(i), *level->retrieveRoom(i + 1), Direction::East, randnumber);
+                }
+                leftdowncorner = false;
+
+            }else{
+                if (level->retrieveRoom(i)->getNorthEdge()->isPassage()){
+                    if (buildornot > 2.5){
+                        constraintHelper(*level->retrieveRoom(i), *level->retrieveRoom(i + 1), Direction::East, randnumber);
+                    }
+                }else{
+                    constraintHelper(*level->retrieveRoom(i), *level->retrieveRoom(i + 1), Direction::East, randnumber);
+                }
             }
+
         }
+
+
 
         //randomly create items
         if (randomitem >= 2.5){
@@ -125,6 +159,13 @@ void Game::createRandomLevel(std::string name, int witch, int height){
 
         if (i != 0 && randomMonster >= 2.5){
             levelBuilder->buildCreature(*level->retrieveRoom(i));
+        }
+    }
+    if (!level->retrieveRoom(level->numberOfRooms - 1)->getWestEdge()->isPassage() && !level->retrieveRoom(level->numberOfRooms - 1)->getNorthEdge()->isPassage()){
+        if (randomDouble() >= 2.5){
+            constraintHelper(*level->retrieveRoom(level->numberOfRooms - 2), *level->retrieveRoom(level->numberOfRooms - 1), Direction::East, randomDouble());
+        }else{
+            constraintHelper(*level->retrieveRoom(level->numberOfRooms - level->width()), *level->retrieveRoom(level->numberOfRooms - 1), Direction::South, randomDouble());
         }
     }
 }

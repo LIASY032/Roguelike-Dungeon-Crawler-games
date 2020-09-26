@@ -152,6 +152,7 @@ int Doorway::type(){
 
 void Wall::setDirection(Direction _direction){
     direction = _direction;
+    // if the direction is north or south, the wall's character should be '-'
     if (direction == Direction::North || direction == Direction::South){
         character = '-';
     }else{
@@ -170,11 +171,14 @@ int Room::id(){
 std::vector<std::string>* Room::display(){
     std::string item = " ";
     std::string creature = "  ";
+    //if an item exists in the room
     if (_item){
         item = 'L';
     }else{
         item = " ";
     }
+
+    //if the creature exists in the room
     if (_creature){
         if (_creature->getBoss()){
             creature = "M*";
@@ -193,14 +197,19 @@ std::vector<std::string>* Room::display(){
     std::string west;
     west = (char) westEdge->displayCharacter();
     std::string extend = " ";
+
+    //check te east edge is connected or not
     if (eastEdge->isPassage()){
         extend = "-";
     }
+
+    //check the south edge is connected or not
     std::string endLine = "        ";
     if (southEdge->isPassage()){
         endLine = "   |    ";
     }
 
+    //formats the string and adds to the _output
     std::string line = "|     | ";
     _output.push_back("+--" + north + "--+ ");
     _output.push_back(line);
@@ -271,6 +280,7 @@ std::string Room::description(){
                    '\n' + southEdge->description() + '\n' +
                    eastEdge->description() + '\n' +
                    westEdge->description() + '\n';
+    //if the room exists a creature
     if (_creature){
         if (_creature->getBoss()){
             _description = _description + "There is a BOSS " + _creature->name() + " to fight\n";
@@ -278,6 +288,8 @@ std::string Room::description(){
             _description = _description + "There is a " + _creature->name() + " to fight\n";
         }
     }
+
+    //if the room exits an item
     if (_item){
         _description = _description + "There is a " + _item->name() + " to pick up\n";
     }
@@ -323,9 +335,19 @@ std::string DungeonLevel::name(){
 std::vector<std::string>* DungeonLevel::display(){
 
     std::string input = "";
+    /**
+     * @brief count record the 2, 4
+     * room example:
+     * 1 2
+     * 3 4
+     *
+     */
     int count = 0;
 
+
     for (int i = 0; i < _height * 6; ++i){
+
+        //becasue the room's vector has 6 strings, level'vector record first row (1, 2) then point to nex row (3, 4)
         if (i%6 == 0 && i != 0){
             count = count + _width;
         }
@@ -354,8 +376,9 @@ DungeonLevel* DungeonLevelBuilder::getDungeonLevel(){
 }
 
 int DungeonLevelBuilder::generateRandomNumber(int number){
-    srand(time(0));
-    return rand()%number;
+    static std::default_random_engine generator(unsigned(time(nullptr)));
+    std::uniform_real_distribution<double> distribution(0, number);
+    return distribution(generator);
 }
 
 Direction DungeonLevelBuilder::reverseDirection(Direction direction){

@@ -2,8 +2,8 @@
 #define CORE_H
 #include <ios>
 
-#include<stdio.h>
-#include<ctype.h>
+#include <stdio.h>
+#include <ctype.h>
 #include <random>
 #include <ctime>
 #include "dungeon.h"
