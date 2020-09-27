@@ -42,15 +42,38 @@ void core::Game::constraintHelper(Room &origin, Room &destination, Direction dir
 void core::Game::createExampleLevel(){
     levelBuilder = std::shared_ptr<DungeonLevelBuilder> (new BasicDungeonLevelBuilder);
 
-    levelBuilder->buildDungeonLevel("Example", 2, 2);
-    level = levelBuilder->getDungeonLevel();
-    levelBuilder->buildEntrance(*level->retrieveRoom(0), Direction::North);
-    levelBuilder->buildExit(*level->retrieveRoom((level->width() * level->height()) - 1), Direction::East);
-    levelBuilder->buildDoorway(*level->retrieveRoom(0), *level->retrieveRoom(2), Direction::South, DungeonLevelBuilder::MoveConstraints::DestinationImpassable);
 
-    levelBuilder->buildDoorway(*level->retrieveRoom(2), *level->retrieveRoom(3), Direction::East, DungeonLevelBuilder::MoveConstraints::DestinationImpassable);
+    levelBuilder->buildDungeonLevel("Example Dungeon Level", 3, 3);
+    level = levelBuilder->getDungeonLevel();
+    level->retrieveRoom(0)->setNorthEdge(*new OneWayDoor);
     levelBuilder->buildDoorway(*level->retrieveRoom(0), *level->retrieveRoom(1), Direction::East, DungeonLevelBuilder::MoveConstraints::None);
-    levelBuilder->buildDoorway(*level->retrieveRoom(1), *level->retrieveRoom(3), Direction::South, DungeonLevelBuilder::MoveConstraints::None);
+    levelBuilder->buildDoorway(*level->retrieveRoom(1), *level->retrieveRoom(4), Direction::South, DungeonLevelBuilder::MoveConstraints::None);
+    level->retrieveRoom(1)->setEastEdge(*new BlockedDoorway);
+    level->retrieveRoom(2)->setWestEdge(*new BlockedDoorway);
+    levelBuilder->buildItem(*level->retrieveRoom(2));
+    levelBuilder->buildCreature(*level->retrieveRoom(2));
+    level->retrieveRoom(2)->setSouthEdge(*new OpenDoorway);
+    level->retrieveRoom(5)->setNorthEdge(*new LockedDoor);
+
+    levelBuilder->buildDoorway(*level->retrieveRoom(0), *level->retrieveRoom(3), Direction::South, DungeonLevelBuilder::MoveConstraints::DestinationImpassable);
+    levelBuilder->buildDoorway(*level->retrieveRoom(3), *level->retrieveRoom(4), Direction::East, DungeonLevelBuilder::MoveConstraints::DestinationImpassable);
+
+    levelBuilder->buildDoorway(*level->retrieveRoom(4), *level->retrieveRoom(5), Direction::East, DungeonLevelBuilder::MoveConstraints::None);
+    levelBuilder->buildDoorway(*level->retrieveRoom(4), *level->retrieveRoom(7), Direction::South, DungeonLevelBuilder::MoveConstraints::None);
+    levelBuilder->buildItem(*level->retrieveRoom(4));
+    levelBuilder->buildCreature(*level->retrieveRoom(4));
+
+    level->retrieveRoom(3)->setSouthEdge(*new BlockedDoorway);
+    level->retrieveRoom(6)->setNorthEdge(*new BlockedDoorway);
+
+    levelBuilder->buildItem(*level->retrieveRoom(6));
+    level->retrieveRoom(6)->setEastEdge(*new LockedDoor);
+    level->retrieveRoom(7)->setWestEdge(*new LockedDoor);
+    levelBuilder->buildDoorway(*level->retrieveRoom(7), *level->retrieveRoom(8), Direction::East, DungeonLevelBuilder::MoveConstraints::None);
+
+    level->retrieveRoom(8)->setEastEdge(*new OneWayDoor);
+    level->retrieveRoom(8)->setCreature(*new Monster("Goblin", true));
+
 }
 
 void Game::createRandomLevel(std::string name, int witch, int height){

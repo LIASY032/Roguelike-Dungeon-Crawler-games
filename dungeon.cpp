@@ -768,13 +768,15 @@ void BasicDungeonLevelBuilder::buildExit(Room &room, Direction direction){
         room.setItem(*axe.clone());
     }
 
-    int othernumber = generateRandomNumber(3);
-    if (othernumber == 0){
-        room.setCreature(*goblin.clone(true));
-    }else if (othernumber == 1){
-        room.setCreature(*wizard.clone(true));
-    }else{
-        room.setCreature(*werewolf.clone(true));
+    if (generateRandomNumber(2) > 0){
+        int othernumber = generateRandomNumber(3);
+        if (othernumber == 0){
+            room.setCreature(*goblin.clone(true));
+        }else if (othernumber == 1){
+            room.setCreature(*wizard.clone(true));
+        }else{
+            room.setCreature(*werewolf.clone(true));
+        }
     }
 }
 
@@ -932,14 +934,17 @@ void MagicalDungeonLevelBuilder::buildExit(Room &room, Direction direction){
         room.setItem(*wand.clone());
     }
 
-    int othernumber = generateRandomNumber(3);
-    if (othernumber == 0){
-        room.setCreature(*goblin.clone(true));
-    }else if (othernumber == 1){
-        room.setCreature(*wizard.clone(true));
-    }else{
-        room.setCreature(*dragon.clone(true));
+    if (generateRandomNumber(2) > 0){
+        int othernumber = generateRandomNumber(3);
+        if (othernumber == 0){
+            room.setCreature(*goblin.clone(true));
+        }else if (othernumber == 1){
+            room.setCreature(*wizard.clone(true));
+        }else{
+            room.setCreature(*dragon.clone(true));
+        }
     }
+
 
 
 }
